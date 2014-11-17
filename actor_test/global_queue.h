@@ -1,4 +1,3 @@
-
 #ifndef ACTOR_TEST_GLOBAL_QUEUE_H_
 #define ACTOR_TEST_GLOBAL_QUEUE_H_
 
@@ -9,15 +8,14 @@
 
 static const std::size_t GLOBAL_QUEUE_SIZE = 100;
 
-class GlobalQueue{
+class GlobalQueue {
 private:
-    std::vector<MessagePac> gqueue();
+	std::vector<MessagePac> gqueue();
 
 public:
-    GlobalQueue();
+	GlobalQueue();
 	MessagePac pop();
 	void push(MessagePac);
 };
-
 
 #endif //ACTOR_TEST_GLOBAL_QUEUE_H_

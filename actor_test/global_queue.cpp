@@ -1,33 +1,23 @@
+#include <global_queue.h>
 
-#include "global_queue.h"
-#include "message_pac.h"
-
-#include <vector>
-
-
-
-
-GlobalQueue::GlobalQueue(){
-	GlobalQueue::gqueue().assign(GLOBAL_QUEUE_SIZE, 0);
-	//GlobalQueue::gqueue().assign(GLOBAL_QUEUE_SIZE, (MessagePac)0);
+GlobalQueue::GlobalQueue() {
+	GlobalQueue::gqueue().clear();
+	//GlobalQueue::gqueue().assign(GLOBAL_QUEUE_SIZE, 0);
 }
 
-MessagePac GlobalQueue::pop(){
-	MessagePac ret;
+MessagePac GlobalQueue::pop() {
+	if (GlobalQueue::gqueue().empty()) {
+		// ERROR 空スタックをpop
+		return (0);
+	} else {
+		MessagePac ret;
 
-	ret = GlobalQueue::gqueue()[0];
+		ret = GlobalQueue::gqueue()[0];
 
-	return(ret);
-
+		return (ret);
+	}
 }
 
-void GlobalQueue::push(MessagePac m){
-
+void GlobalQueue::push(MessagePac m) {
+	GlobalQueue::gqueue().push_back(m);
 }
-    
-    
-    
-    
-    
-    
-    
