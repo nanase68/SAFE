@@ -7,11 +7,11 @@ DigitalOut led1(LED1);
 DigitalOut led2(LED2);
 
 void check_queue() {
-	led2 = !led2;
+	gqueue.checkQueue();
 }
 
 int main() {
-	led2 = 1;
+	GlobalQueue gqueue;
 	flipper.attach(&check_queue, 2.0); // the address of the function to be attached (flip) and the interval (2 seconds)
 
 	// spin in a main loop. flipper will interrupt it to call flip

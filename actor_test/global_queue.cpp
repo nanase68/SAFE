@@ -28,6 +28,7 @@ bool GlobalQueue::checkQueue() {
 		// グローバルキューが空
 		return (false);
 	} else {
-	GlobalQueue::pop().
-}
+		GlobalQueue::pop().dealMessagePac();
+		return(true);
+	}
 }
