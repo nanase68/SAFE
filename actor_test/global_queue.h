@@ -16,6 +16,7 @@ public:
 	GlobalQueue();
 	MessagePac pop();
 	void push(MessagePac);
+	bool checkQueue();
 };
 
 #endif //ACTOR_TEST_GLOBAL_QUEUE_H_

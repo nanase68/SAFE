@@ -1,4 +1,4 @@
-#include <global_queue.h>
+#include "global_queue.h"
 
 GlobalQueue::GlobalQueue() {
 	GlobalQueue::gqueue().clear();
@@ -7,7 +7,8 @@ GlobalQueue::GlobalQueue() {
 
 MessagePac GlobalQueue::pop() {
 	if (GlobalQueue::gqueue().empty()) {
-		// ERROR 空スタックをpop
+		// グローバルキューが空
+		// ERROR 空キューをpop
 		return (0);
 	} else {
 		MessagePac ret;
@@ -20,4 +21,13 @@ MessagePac GlobalQueue::pop() {
 
 void GlobalQueue::push(MessagePac m) {
 	GlobalQueue::gqueue().push_back(m);
+}
+
+bool GlobalQueue::checkQueue() {
+	if (GlobalQueue::gqueue().empty()) {
+		// グローバルキューが空
+		return (false);
+	} else {
+	GlobalQueue::pop().
+}
 }
