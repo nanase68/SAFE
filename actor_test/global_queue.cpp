@@ -2,23 +2,16 @@
 #include "global_queue.h"
 #include "message_pac.h"
 
+#include <vector>
 
 
 
 
-
-void GlobalQueue::init(void){
-    for(int i=0; i < GLOBAL_QUEUE_SIZE; i++){
-        GlobalQueue::gqueue[i] = 0;
-    }
-    
-    
+GlobalQueue::GlobalQueue(){
+	GlobalQueue::gqueue().assign(GLOBAL_QUEUE_SIZE, 0);
 }
 
-
-
-
-MessagePac GlobalQueue::pop(void){
+MessagePac GlobalQueue::pop(){
 	MessagePac ret;
 
 	ret = GlobalQueue::gqueue[0];
@@ -26,6 +19,8 @@ MessagePac GlobalQueue::pop(void){
 	return(ret);
 
 }
+
+
     
     
     
