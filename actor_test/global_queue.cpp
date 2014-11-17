@@ -20,7 +20,9 @@ MessagePac GlobalQueue::pop(){
 
 }
 
+void GlobalQueue::push(MessagePac m){
 
+}
     
     
     

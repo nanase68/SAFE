@@ -16,6 +16,7 @@ private:
 public:
     GlobalQueue();
 	MessagePac pop();
+	void push(MessagePac);
 };
 
 
