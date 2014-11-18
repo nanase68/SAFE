@@ -12,11 +12,11 @@ void MessagePac::operator=(int n) {
 	MessagePac::message = n;
 }
 
-int MessagePac::get_message(void) {
+Message MessagePac::get_message(void) {
 	return MessagePac::message;
 }
 
 
-bool dealMessagePac(){
+bool MessagePac::dealMessagePac(){
 	MessagePac::actor.receiveMessage(message);
 }

@@ -13,7 +13,7 @@ public:
 	MessagePac();
 	MessagePac(int i);
 	void operator=(int);
-	int get_message(void);
+	Message get_message(void);
 	bool dealMessagePac(void);
 
 };
