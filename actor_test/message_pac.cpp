@@ -19,4 +19,7 @@ Message MessagePac::get_message(void) {
 
 bool MessagePac::dealMessagePac(){
 	MessagePac::actor.receiveMessage(MessagePac::message);
+
+	//TODO かく
+	return false;
 }

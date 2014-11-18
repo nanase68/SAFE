@@ -1,7 +1,7 @@
 #ifndef ACTOR_TEST_MESSAGE_PAC_H_
 #define ACTOR_TEST_MESSAGE_PAC_H_
 
-#include "actor.h"
+#include "Actor.h"
 #include "Message.h"
 
 class MessagePac {
