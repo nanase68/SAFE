@@ -16,4 +16,6 @@ public:
 	int get_message(void);
 	bool dealMessagePac(void);
 
+};
+
 #endif //ACTOR_TEST_MESSAGE_PAC_H_
