@@ -1,8 +1,8 @@
 #ifndef ACTOR_TEST_MESSAGE_PAC_H_
 #define ACTOR_TEST_MESSAGE_PAC_H_
 
-#include "Actor.h"
 #include "Message.h"
+#include "Actor.h"
 
 class MessagePac {
 private:
