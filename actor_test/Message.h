@@ -12,7 +12,7 @@ class Message {
 private:
 	int content;
 public:
-	void operator=(int);
+	Message operator=(int);
 
 	Message();
 	virtual ~Message();

@@ -7,8 +7,9 @@
 
 #include <Message.h>
 
-Message::operator=(int i) {
+Message Message::operator=(int i) {
 	Message::content = i;
+	return *this;
 }
 
 Message::Message() {
