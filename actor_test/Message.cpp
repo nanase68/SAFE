@@ -12,12 +12,12 @@ Message Message::operator=(int i) {
 	return *this;
 }
 
-int get_content(){
+int Message::get_content(){
 	return Message::content;
 
 }
 
-bool dealMessage(){
+bool Message::dealMessage(){
 	Message::actor->receiveMessage(*this);
 }
 
