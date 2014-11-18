@@ -1,7 +1,7 @@
 #ifndef ACTOR_TEST_GLOBAL_QUEUE_H_
 #define ACTOR_TEST_GLOBAL_QUEUE_H_
 
-#include "MessagePac.h"
+#include "Message.h"
 
 // vectorを使えるようにする
 #include <vector>
@@ -10,12 +10,12 @@ static const std::size_t GLOBAL_QUEUE_SIZE = 100;
 
 class GlobalQueue {
 private:
-	std::vector<MessagePac> gqueue;
+	std::vector<Message> gqueue;
 
 public:
 	GlobalQueue();
-	MessagePac pop();
-	void push(MessagePac);
+	Message pop();
+	void push(Message);
 	bool checkQueue();
 };
 
