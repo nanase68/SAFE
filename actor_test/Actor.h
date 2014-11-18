@@ -8,7 +8,6 @@
 #ifndef ACTOR_H_
 #define ACTOR_H_
 
-printf("actor passed");
 #include "Message.h"
 
 class Actor {
