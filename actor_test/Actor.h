@@ -12,8 +12,8 @@
 
 class Actor {
 public:
-	bool sendMessage(Message);
-	bool receiveMessage(Message);
+	bool sendMessage(Message*);
+	bool receiveMessage(Message*);
 	bool spawnActor();
 	bool changeState();
 

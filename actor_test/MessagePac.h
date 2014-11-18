@@ -6,14 +6,14 @@
 
 class MessagePac {
 private:
-	Message message;
-	Actor actor;
+	Message *message;
+	Actor *actor;
 
 public:
 	MessagePac();
 	MessagePac(int i);
 	void operator=(int);
-	Message get_message(void);
+	Message *get_message(void);
 	bool dealMessagePac(void);
 
 };

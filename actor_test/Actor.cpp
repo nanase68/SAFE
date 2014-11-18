@@ -7,7 +7,7 @@
 
 #include <Actor.h>
 
-bool Actor::receiveMessage(Message m){
+bool Actor::receiveMessage(Message* m){
 	// TODO かく
 	return false;
 
