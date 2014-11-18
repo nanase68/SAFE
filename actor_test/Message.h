@@ -8,13 +8,21 @@
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
+printf("message passed");
+#include "Actor.h"
+
 class Message {
 private:
 	int content;
+	Actor *actor;
+
 public:
 	Message operator=(int);
+	int get_content(void);
+	bool dealMessage(void);
 
 	Message();
+	Message(int);
 	virtual ~Message();
 };
 

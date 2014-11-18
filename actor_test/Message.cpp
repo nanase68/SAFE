@@ -12,9 +12,21 @@ Message Message::operator=(int i) {
 	return *this;
 }
 
-Message::Message() {
-	// TODO Auto-generated constructor stub
+int get_content(){
+	return Message::content;
 
+}
+
+bool dealMessage(){
+	Message::actor->receiveMessage(*this);
+}
+
+
+Message::Message() {
+	Message::content = 0;
+}
+Message::Message(int i){
+	Message::content = i;
 }
 
 Message::~Message() {
