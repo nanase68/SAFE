@@ -8,7 +8,9 @@
 #ifndef ACTOR_H_
 #define ACTOR_H_
 
-#include "Message.h"
+//前方参照
+//#include "Message.h"
+class Message;
 
 class Actor {
 public:

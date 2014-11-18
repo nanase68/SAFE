@@ -1,7 +1,7 @@
 #ifndef ACTOR_TEST_GLOBAL_QUEUE_H_
 #define ACTOR_TEST_GLOBAL_QUEUE_H_
 
-#include "MessagePac.h"
+#include "Message.h"
 
 // vectorを使えるようにする
 #include <vector>
