@@ -8,8 +8,8 @@
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
-//前方参照
-//#include "Actor.h"
+#include "Actor.h"
+//前方参照（インクルードガードで防がれた時のため）
 class Actor;
 
 class Message {
