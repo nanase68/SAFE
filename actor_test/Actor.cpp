@@ -7,6 +7,12 @@
 
 #include <Actor.h>
 
+bool receiveMessage(Message m){
+	// TODO かく
+	return false;
+
+}
+
 Actor::Actor() {
 	// TODO Auto-generated constructor stub
 

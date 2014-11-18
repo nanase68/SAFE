@@ -13,7 +13,7 @@
 class Actor {
 public:
 	bool sendMessage(Message);
-	bool receiveMessage();
+	bool receiveMessage(Message);
 	bool spawnActor();
 	bool changeState();
 
