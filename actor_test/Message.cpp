@@ -7,7 +7,7 @@
 
 #include <Message.h>
 
-Message::operator =(int i){
+Message::operator=(int i) {
 	Message::content = i;
 }
 
