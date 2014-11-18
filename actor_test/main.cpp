@@ -1,6 +1,6 @@
 #include "mbed.h"
 
-#include "global_queue.h"
+#include "GlobalQueue.h"
 
 Ticker flipper;
 DigitalOut led1(LED1);

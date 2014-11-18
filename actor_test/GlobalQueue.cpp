@@ -1,4 +1,4 @@
-#include "global_queue.h"
+#include "GlobalQueue.h"
 
 GlobalQueue::GlobalQueue() {
 	GlobalQueue::gqueue.clear();
