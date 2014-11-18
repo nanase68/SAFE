@@ -7,6 +7,10 @@
 
 #include <Message.h>
 
+Message::operator =(int i){
+	Message::content = i;
+}
+
 Message::Message() {
 	// TODO Auto-generated constructor stub
 

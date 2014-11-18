@@ -12,6 +12,8 @@ class Message {
 private:
 	int content;
 public:
+	void operator=(int);
+
 	Message();
 	virtual ~Message();
 };
