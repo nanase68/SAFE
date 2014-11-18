@@ -18,5 +18,5 @@ Message MessagePac::get_message(void) {
 
 
 bool MessagePac::dealMessagePac(){
-	MessagePac::actor.receiveMessage(message);
+	MessagePac::actor.receiveMessage(MessagePac::message);
 }
