@@ -10,12 +10,12 @@ static const std::size_t GLOBAL_QUEUE_SIZE = 100;
 
 class GlobalQueue {
 private:
-	std::vector<MessagePac> gqueue;
+	std::vector<Message> gqueue;
 
 public:
 	GlobalQueue();
-	MessagePac pop();
-	void push(MessagePac);
+	Message pop();
+	void push(Message);
 	bool checkQueue();
 };
 
