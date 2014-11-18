@@ -18,7 +18,7 @@ int Message::get_content(){
 }
 
 bool Message::dealMessage(){
-	Message::actor->receiveMessage(*this);
+	Message::actor->receiveMessage(this);
 }
 
 
