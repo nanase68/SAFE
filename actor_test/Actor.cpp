@@ -5,7 +5,7 @@
  *      Author: Ys
  */
 
-#include <Actor.h>
+#include "Actor.h"
 
 bool Actor::receiveMessage(Message* m){
 	// TODO かく

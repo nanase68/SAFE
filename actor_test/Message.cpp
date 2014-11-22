@@ -5,7 +5,7 @@
  *      Author: Ys
  */
 
-#include <Message.h>
+#include "Message.h"
 
 Message Message::operator=(int i) {
 	Message::content = i;
