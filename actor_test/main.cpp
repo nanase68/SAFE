@@ -4,9 +4,7 @@
 
 Ticker flipper;
 DigitalOut led1(LED1);
-DigitalOut led2(LED2);
-DigitalOut led3(LED3);
-DigitalOut led4(LED4);
+
 
 GlobalQueue gqueue;
 Actor actor;
@@ -24,10 +22,5 @@ int main() {
 	while (1) {
 		led1 = !led1;
 		wait(0.2);
-
-		int temp = led4;
-		led4 = led3;
-		led3 = led2;
-		led2 = temp;
 	}
 }

@@ -10,16 +10,15 @@
 #include <iostream>
 using namespace std;
 
-//DigitalOut led2(LED2);
-//DigitalOut led3(LED3);
-//DigitalOut led4(LED4);
+DigitalOut led2(LED2);
+DigitalOut led3(LED3);
+DigitalOut led4(LED4);
 
 
 bool Actor::receiveMessage(Message* m){
 	// TODO かく
 	cout << "receiveMessage" << endl;
 
-	/**
 	if((led2 == 0) && (led3 == 0) && (led4 == 0)){
 		led2 = 1;
 	}else{
@@ -28,7 +27,6 @@ bool Actor::receiveMessage(Message* m){
 		led3 = led2;
 		led2 = temp;
 	}
-	**/
 
 
 	return false;
