@@ -19,13 +19,20 @@ int Message::get_content(){
 
 bool Message::dealMessage(){
 	Message::actor->receiveMessage(this);
+	// TODO かく
+	return false;
 }
 
+Message::Message(){
 
-Message::Message() {
+}
+
+Message::Message(Actor* a) {
+	Message::actor = a;
 	Message::content = 0;
 }
-Message::Message(int i){
+Message::Message(Actor* a, int i){
+	Message::actor = a;
 	Message::content = i;
 }
 

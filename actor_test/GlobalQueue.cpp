@@ -14,6 +14,7 @@ Message GlobalQueue::dequeue() {
 		Message ret;
 
 		ret = GlobalQueue::gqueue[0];
+		GlobalQueue::gqueue.erase(GlobalQueue::gqueue.begin());
 
 		return (ret);
 	}

@@ -23,7 +23,8 @@ public:
 	bool dealMessage(void);
 
 	Message();
-	Message(int);
+	Message(Actor*);
+	Message(Actor*, int);
 	virtual ~Message();
 };
 

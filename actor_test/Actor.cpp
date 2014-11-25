@@ -7,8 +7,14 @@
 
 #include "Actor.h"
 
+#include <iostream>
+using namespace std;
+
 bool Actor::receiveMessage(Message* m){
 	// TODO かく
+	cout << "receiveMessage" << endl;
+
+
 	return false;
 
 }
