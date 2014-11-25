@@ -14,8 +14,8 @@ private:
 
 public:
 	GlobalQueue();
-	Message pop();
-	void push(Message);
+	Message dequeue();
+	void enqueue(Message);
 	bool checkQueue();
 };
 

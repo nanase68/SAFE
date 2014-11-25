@@ -5,7 +5,7 @@ GlobalQueue::GlobalQueue() {
 	//GlobalQueue::gqueue().assign(GLOBAL_QUEUE_SIZE, 0);
 }
 
-Message GlobalQueue::pop() {
+Message GlobalQueue::dequeue() {
 	if (GlobalQueue::gqueue.empty()) {
 		// グローバルキューが空
 		// ERROR 空キューをpop
@@ -19,7 +19,7 @@ Message GlobalQueue::pop() {
 	}
 }
 
-void GlobalQueue::push(Message m) {
+void GlobalQueue::enqueue(Message m) {
 	GlobalQueue::gqueue.push_back(m);
 }
 
@@ -28,7 +28,7 @@ bool GlobalQueue::checkQueue() {
 		// グローバルキューが空
 		return (false);
 	} else {
-		GlobalQueue::pop().dealMessage();
+		GlobalQueue::dequeue().dealMessage();
 		return(true);
 	}
 }
