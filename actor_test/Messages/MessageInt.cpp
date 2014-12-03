@@ -6,17 +6,17 @@
  */
 
 #include "Messages/MessageInt.h"
-MessageInt::set_content(int i){
+void MessageInt::set_content(int i){
 	MessageInt::content = i;
 }
-MessageInt::operator =(int i){
+Message& MessageInt::operator =(int i){
 	MessageInt::set_content(i);
 	return *this;
 }
-MessageInt::get_content(){
+int MessageInt::get_content(){
 	return content;
 }
-MessageInt::MessageStr(Actor* sender, Actor* destination, int i)
+MessageInt::MessageInt(Actor* sender, Actor* destination, int i)
 : Message::Message(Actor* sender, Actor* destination){
 	MessageInt::set_content(i);
 }

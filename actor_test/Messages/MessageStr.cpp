@@ -6,14 +6,14 @@
  */
 
 #include "Messages/MessageStr.h"
-MessageStr::set_content(std::string str){
+void MessageStr::set_content(std::string str){
 	MessageStr::content = str;
 }
-MessageStr::operator =(std::string str){
+Message& MessageStr::operator =(std::string str){
 	MessageStr::set_content(str);
 	return *this;
 }
-MessageStr::get_content(){
+std::string MessageStr::get_content(){
 	return content;
 }
 MessageStr::MessageStr(Actor* sender, Actor* destination, std::string str)
