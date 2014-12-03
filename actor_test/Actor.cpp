@@ -6,6 +6,7 @@
  */
 #include "mbed.h"
 #include "Actor.h"
+#include "Message.h"
 
 #include <iostream>
 using namespace std;
