@@ -20,7 +20,7 @@ public:
 	Message& operator=(std::string);
 	std::string get_content(void);
 
-	MessageStr(Actor*, std::string);
+	MessageStr(Actor*, Actor*, std::string);
 
 	MessageStr();
 	virtual ~MessageStr();

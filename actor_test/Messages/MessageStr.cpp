@@ -17,7 +17,7 @@ std::string MessageStr::get_content(){
 	return content;
 }
 MessageStr::MessageStr(Actor* sender, Actor* destination, std::string str)
-: Message::Message(Actor* sender, Actor* destination){
+: Message::Message(sender, destination){
 	MessageStr::set_content(str);
 }
 

@@ -8,7 +8,7 @@
 #include "Message.h"
 
 bool Message::dealMessage(){
-	Message::actor->receiveMessage(this);
+	Message::destination->receiveMessage(this);
 	// TODO かく
 	return false;
 }

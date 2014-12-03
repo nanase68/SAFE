@@ -17,7 +17,7 @@ int MessageInt::get_content(){
 	return content;
 }
 MessageInt::MessageInt(Actor* sender, Actor* destination, int i)
-: Message::Message(Actor* sender, Actor* destination){
+: Message::Message(sender, destination){
 	MessageInt::set_content(i);
 }
 
