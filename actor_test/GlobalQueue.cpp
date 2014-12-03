@@ -1,4 +1,5 @@
 #include "GlobalQueue.h"
+#include <stdlib.h>
 
 GlobalQueue::GlobalQueue() {
 	GlobalQueue::gqueue.clear();
@@ -9,7 +10,7 @@ Message GlobalQueue::dequeue() {
 	if (GlobalQueue::gqueue.empty()) {
 		// グローバルキューが空
 		// ERROR 空キューをpop
-		return (0);
+		exit(0);
 	} else {
 		Message ret;
 
