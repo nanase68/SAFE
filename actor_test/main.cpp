@@ -10,7 +10,7 @@ GlobalQueue gqueue;
 Actor actor;
 
 void check_queue() {
-	Message message(&actor, &actor);
+	MessageInt message(&actor, &actor);
 	gqueue.enqueue(message);
 	gqueue.checkQueue();
 }

@@ -9,6 +9,7 @@
 #define MESSAGEINT_H_
 
 #include "Message.h"
+class Message;
 
 class MessageInt: public Message {
 protected:

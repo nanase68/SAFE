@@ -12,6 +12,9 @@
 //前方参照（インクルードガードで防がれた時のため）
 class Actor;
 
+#include "Messages/MessageInt.h"
+#include "Messages/MessageStr.h"
+
 class Message {
 protected:
 	Actor *sender, *destination;

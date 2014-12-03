@@ -10,6 +10,8 @@
 
 #include <string>
 #include "Message.h"
+class Message;
+
 
 class MessageStr: public Message {
 protected:
