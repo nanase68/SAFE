@@ -7,16 +7,6 @@
 
 #include "Message.h"
 
-Message Message::operator=(int i) {
-	Message::content = i;
-	return *this;
-}
-
-int Message::get_content(){
-	return Message::content;
-
-}
-
 bool Message::dealMessage(){
 	Message::actor->receiveMessage(this);
 	// TODO かく
@@ -27,13 +17,9 @@ Message::Message(){
 
 }
 
-Message::Message(Actor* a) {
-	Message::actor = a;
-	Message::content = 0;
-}
-Message::Message(Actor* a, int i){
-	Message::actor = a;
-	Message::content = i;
+Message::Message(Actor* sender, Actor* destination) {
+	Message::sender = sender;
+	Message::destination = destination;
 }
 
 Message::~Message() {

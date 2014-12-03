@@ -13,18 +13,14 @@
 class Actor;
 
 class Message {
-private:
-	int content;
-	Actor *actor;
+protected:
+	Actor *sender, *destination;
 
 public:
-	Message operator=(int);
-	int get_content(void);
 	bool dealMessage(void);
 
 	Message();
-	Message(Actor*);
-	Message(Actor*, int);
+	Message(Actor*, Actor*);
 	virtual ~Message();
 };
 
