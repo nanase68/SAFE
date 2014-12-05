@@ -6,12 +6,11 @@ Ticker flipper;
 DigitalOut led1(LED1);
 
 
-GlobalQueue gqueue;
 Actor actor;
 
 void check_queue() {
 	MessageInt message(&actor, &actor, 0);
-	gqueue.enqueue(message);
+	gqueue.enqueue(&message);
 	gqueue.checkQueue();
 }
 
