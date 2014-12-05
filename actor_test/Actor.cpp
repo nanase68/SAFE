@@ -7,6 +7,7 @@
 #include "mbed.h"
 #include "Actor.h"
 #include "Message.h"
+#include "GlobalQueue.h"
 
 #include <iostream>
 using namespace std;
@@ -32,6 +33,11 @@ bool Actor::receiveMessage(Message* m){
 
 	return false;
 
+}
+
+bool Actor::sendMessage(Message* m){
+	gqueue.enqueue(m);
+	return true;
 }
 
 Actor::Actor() {
