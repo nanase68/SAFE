@@ -9,8 +9,13 @@
 #include "Message.h"
 #include "GlobalQueue.h"
 
+#include <stdio.h>
 #include <iostream>
+
 using namespace std;
+
+
+Ticker ticker;
 
 DigitalOut led2(LED2);
 DigitalOut led3(LED3);
@@ -30,6 +35,9 @@ bool Actor::receiveMessage(Message* m){
 		led2 = temp;
 	}
 
+	//同じメッセージ使い回し（手抜き）
+	gqueue.enqueue(m);
+
 
 	return false;
 
@@ -41,8 +49,13 @@ bool Actor::sendMessage(Message* m){
 }
 
 
-
 bool Actor::start(){
+	while(1){
+		gqueue.checkQueue();
+
+		wait(1);
+		//wait(0.01); // 0.01 sec
+	}
 	return true;
 }
 

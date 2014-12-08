@@ -18,6 +18,7 @@ public:
 	bool spawnActor();
 	bool changeState();
 
+	void checkQueue();
 	static bool start();
 
 	Actor();
