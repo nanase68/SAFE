@@ -40,6 +40,12 @@ bool Actor::sendMessage(Message* m){
 	return true;
 }
 
+
+
+bool Actor::start(){
+	return true;
+}
+
 Actor::Actor() {
 	// TODO Auto-generated constructor stub
 

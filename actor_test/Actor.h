@@ -18,6 +18,8 @@ public:
 	bool spawnActor();
 	bool changeState();
 
+	static bool start();
+
 	Actor();
 	virtual ~Actor();
 };
