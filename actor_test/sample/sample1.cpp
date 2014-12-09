@@ -69,6 +69,7 @@ void sample1() {
 	//a2.sendTo(&a2, &m2);
 	sysActor.setPeriodicTask(&a2, &m2, 2.0);
 
+	cout << "Start!!" << endl;
 	Actor::start();
 	return;
 }

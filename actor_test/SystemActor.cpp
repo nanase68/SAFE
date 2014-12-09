@@ -26,9 +26,8 @@ void SystemActor::beforeAttach(Actor *dest, Message *msg){
  *  periodic time : sec
  */
 bool SystemActor::setPeriodicTask(Actor *dest, Message *msg, double periodicTime){
-	Ticker ticker;
 	this->beforeAttach(dest, msg);
-	ticker.attach(&SystemActor::autoSend, periodicTime); // the address of the function to be attached (flip) and the interval (2 seconds)
+	SystemActor::ticker.attach(&SystemActor::autoSend, periodicTime); // the address of the function to be attached (flip) and the interval (2 seconds)
 
 	return true;
 }
@@ -45,3 +44,4 @@ SystemActor::~SystemActor() {
 Actor *SystemActor::destination;
 Message *SystemActor::message;
 int SystemActor::lock;
+Ticker SystemActor::ticker;

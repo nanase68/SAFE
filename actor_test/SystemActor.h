@@ -8,6 +8,7 @@
 #ifndef SYSTEMACTOR_H_
 #define SYSTEMACTOR_H_
 
+#include "mbed.h"
 #include "Actor.h"
 
 class SystemActor: public Actor {
@@ -15,6 +16,7 @@ private:
 	static Actor *destination;
 	static Message *message;
 	static int lock;
+	static Ticker ticker;
 
 public:
 	static void autoSend();
