@@ -15,10 +15,8 @@ class Actor;
 
 
 class Message {
-protected:
-	Actor *sender, *destination;
-
 public:
+	Actor *sender, *destination;
 	bool dealMessage(void);
 
 	Message();

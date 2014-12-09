@@ -13,7 +13,7 @@ class Message;
 
 class Actor {
 public:
-	bool sendMessage(Message*);
+	bool sendTo(Actor *dest, Message *m);
 	virtual bool receiveMessage(Message*);
 	bool spawnActor();
 	bool changeState();
