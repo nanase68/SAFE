@@ -14,6 +14,7 @@
 
 namespace {
 
+DigitalOut led1(LED1);
 DigitalOut led2(LED2);
 DigitalOut led3(LED3);
 DigitalOut led4(LED4);
@@ -42,12 +43,29 @@ bool MyActor::receiveMessage(Message *m) {
 	return false;
 }
 
+class MyActor2 : public Actor{
+public:
+	bool receiveMessage(Message *m);
+} actor2;
+
+bool MyActor2::receiveMessage(Message *m){
+	cout << "receiveMessage2" << endl;
+
+	led1 = !led1;
+
+	sendMessage(m);
+
+	return false;
 }
+
+} // namespace
 
 void sample1() {
 	MyActor a;
-	Message m;
+	MyActor2 a2;
+	Message m, m2;
 	a.sendTo(&a, &m);
+	a2.sendTo(&a2, &m2);
 
 	Actor::start();
 	return;
