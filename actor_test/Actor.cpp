@@ -30,8 +30,7 @@ bool Actor::start(){
 	while(1){
 		gqueue.checkQueue();
 
-		wait(1);
-		//wait(0.01); // 0.01 sec
+		wait(0.1); // 0.01 sec
 	}
 	return true;
 }

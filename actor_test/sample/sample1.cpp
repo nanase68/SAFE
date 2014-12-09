@@ -39,7 +39,7 @@ bool MyActor::receiveMessage(Message *m) {
 	}
 
 	//同じメッセージ使い回し（手抜き）
-	sendTo(this, m);
+	//sendTo(this, m);
 
 	return false;
 }
@@ -65,9 +65,8 @@ void sample1() {
 	MyActor a;
 	MyActor2 a2;
 	Message m, m2;
-	a.sendTo(&a, &m);
-	//a2.sendTo(&a2, &m2);
-	sysActor.setPeriodicTask(&a2, &m2, 2.0);
+	a2.sendTo(&a2, &m2);
+	sysActor.setPeriodicTask(&a, &m, 1.0);
 
 	cout << "Start!!" << endl;
 	Actor::start();
