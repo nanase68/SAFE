@@ -14,7 +14,7 @@ class Message;
 class Actor {
 public:
 	bool sendMessage(Message*);
-	bool receiveMessage(Message*);
+	virtual bool receiveMessage(Message*);
 	bool spawnActor();
 	bool changeState();
 

@@ -9,39 +9,14 @@
 #include "Message.h"
 #include "GlobalQueue.h"
 
-#include <stdio.h>
-#include <iostream>
 
 using namespace std;
 
 
-Ticker ticker;
-
-DigitalOut led2(LED2);
-DigitalOut led3(LED3);
-DigitalOut led4(LED4);
-
-
 bool Actor::receiveMessage(Message* m){
-	// TODO かく
-	cout << "receiveMessage" << endl;
-
-	if((led2 == 0) && (led3 == 0) && (led4 == 0)){
-		led2 = 1;
-	}else{
-		int temp = led4;
-		led4 = led3;
-		led3 = led2;
-		led2 = temp;
-	}
-
-	//同じメッセージ使い回し（手抜き）
-	gqueue.enqueue(m);
-
-
 	return false;
-
 }
+
 
 bool Actor::sendMessage(Message* m){
 	gqueue.enqueue(m);
