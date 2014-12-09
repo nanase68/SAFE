@@ -18,7 +18,9 @@ bool Actor::receiveMessage(Message* m){
 }
 
 
-bool Actor::sendMessage(Message* m){
+bool Actor::sendTo(Actor *dest, Message* m){
+	m->sender = this;
+	m->destination = dest;
 	gqueue.enqueue(m);
 	return true;
 }

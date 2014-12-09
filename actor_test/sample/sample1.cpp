@@ -38,7 +38,7 @@ bool MyActor::receiveMessage(Message *m) {
 	}
 
 	//同じメッセージ使い回し（手抜き）
-	sendMessage(m);
+	sendTo(this, m);
 
 	return false;
 }
@@ -63,10 +63,9 @@ bool MyActor2::receiveMessage(Message *m){
 void sample1() {
 	MyActor a;
 	MyActor2 a2;
-	Message m(&a, &a);
-	Message m2(&a2, &a2);
-	a.sendMessage(&m);
-	a2.sendMessage(&m2);
+	Message m, m2;
+	a.sendTo(&a, &m);
+	a2.sendTo(&a2, &m2);
 
 	Actor::start();
 	return;
