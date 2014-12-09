@@ -9,6 +9,7 @@
 
 #include "Actor.h"
 #include "Message.h"
+#include "SystemActor.h"
 
 #include "mbed.h"
 
@@ -53,19 +54,20 @@ bool MyActor2::receiveMessage(Message *m){
 
 	led1 = !led1;
 
-	sendMessage(m);
+	this->sendTo(this, m);
 
 	return false;
 }
 
-} // namespace
+}// namespace
 
 void sample1() {
 	MyActor a;
 	MyActor2 a2;
 	Message m, m2;
 	a.sendTo(&a, &m);
-	a2.sendTo(&a2, &m2);
+	//a2.sendTo(&a2, &m2);
+	sysActor.setPeriodicTask(&a2, &m2, 2.0);
 
 	Actor::start();
 	return;
