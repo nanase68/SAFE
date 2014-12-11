@@ -8,26 +8,16 @@
 #include "mbed.h"
 #include "SystemActor.h"
 #include "Message.h"
+#include "TickerComposit.h"
 
 SystemActor sysActor;
-
-void SystemActor::autoSend(){
-	//TODO lockの使い方を考える
-	sysActor.sendTo(SystemActor::destination, SystemActor::message);
-}
-
-void SystemActor::beforeAttach(Actor *dest, Message *msg){
-	SystemActor::destination = dest;
-	SystemActor::message = msg;
-	SystemActor::lock = 1;// 未使用
-}
 
 /*
  *  periodic time : sec
  */
-bool SystemActor::setPeriodicTask(Actor *dest, Message *msg, double periodicTime){
-	this->beforeAttach(dest, msg);
-	SystemActor::ticker.attach(&SystemActor::autoSend, periodicTime); // the address of the function to be attached (flip) and the interval (2 seconds)
+bool SystemActor::setPeriodicTask(Actor *dest, Message *msg, float periodicTime){
+	TickerComposit *tc = new TickerComposit(dest, msg, periodicTime);
+	SystemActor::tcVector.push_back(tc);
 
 	return true;
 }
@@ -41,7 +31,4 @@ SystemActor::~SystemActor() {
 	// TODO Auto-generated destructor stub
 }
 
-Actor *SystemActor::destination;
-Message *SystemActor::message;
-int SystemActor::lock;
-Ticker SystemActor::ticker;
+std::vector<TickerComposit*> SystemActor::tcVector;

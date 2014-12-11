@@ -10,18 +10,17 @@
 
 #include "mbed.h"
 #include "Actor.h"
+#include <vector>
+class TickerComposit;
 
 class SystemActor: public Actor {
 private:
-	static Actor *destination;
-	static Message *message;
-	static int lock;
-	static Ticker ticker;
+	static vector<TickerComposit*> tcVector;
 
 public:
-	static void autoSend();
-	void beforeAttach(Actor *dest, Message *msg);
-	bool setPeriodicTask(Actor *dest, Message *msg, double periodicTime);
+	bool setPeriodicTask(Actor *dest, Message *msg, float periodicTime);
+
+	void makeTicker();
 
 	SystemActor();
 	virtual ~SystemActor();
