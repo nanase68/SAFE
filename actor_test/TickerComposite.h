@@ -14,7 +14,7 @@ namespace mbed{
 class Actor;
 class Message;
 
-class TickerComposit{
+class TickerComposite{
 public:
 	mbed::Ticker *ticker;
 	Actor *destination;
@@ -22,8 +22,8 @@ public:
 
 	void autoSend();
 
-	TickerComposit(Actor *dest, Message *msg, float periodcTime);
-	~TickerComposit();
+	TickerComposite(Actor *dest, Message *msg, float periodcTime);
+	~TickerComposite();
 };
 
 #endif /* TICKERCOMPOSIT_H_ */
