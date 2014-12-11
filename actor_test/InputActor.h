@@ -8,7 +8,7 @@
 #ifndef INPUTACTOR_H_
 #define INPUTACTOR_H_
 
-#include <Actor.h>
+#include "Actor.h"
 
 class InputActor: public Actor {
 public:

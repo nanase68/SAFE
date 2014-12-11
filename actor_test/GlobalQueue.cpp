@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <vector>
 
+#include "Message.h"
+
 GlobalQueue gqueue;
 
 GlobalQueue::GlobalQueue() {

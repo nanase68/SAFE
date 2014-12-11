@@ -1,10 +1,11 @@
 #ifndef ACTOR_TEST_GLOBAL_QUEUE_H_
 #define ACTOR_TEST_GLOBAL_QUEUE_H_
 
-#include "Message.h"
 
 // vectorを使えるようにする
 #include <vector>
+
+class Message;
 
 static const std::size_t GLOBAL_QUEUE_SIZE = 100;
 
