@@ -54,7 +54,7 @@ bool MyActor2::receiveMessage(Message *m){
 
 	led1 = !led1;
 
-	this->sendTo(this, m);
+	//this->sendTo(this, m);
 
 	return false;
 }
@@ -65,8 +65,9 @@ void sample1() {
 	MyActor a;
 	MyActor2 a2;
 	Message m, m2;
-	a2.sendTo(&a2, &m2);
+	//a2.sendTo(&a2, &m2);
 	sysActor.setPeriodicTask(&a, &m, 1.0);
+	sysActor.setPeriodicTask(&a2, &m2, 2.0);
 
 	cout << "Start!!" << endl;
 	Actor::start();
