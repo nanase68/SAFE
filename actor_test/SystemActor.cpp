@@ -8,7 +8,7 @@
 #include "mbed.h"
 #include "SystemActor.h"
 #include "Message.h"
-#include "TickerComposit.h"
+#include "TickerComposite.h"
 
 SystemActor sysActor;
 
@@ -16,7 +16,7 @@ SystemActor sysActor;
  *  periodic time : sec
  */
 bool SystemActor::setPeriodicTask(Actor *dest, Message *msg, float periodicTime){
-	TickerComposit *tc = new TickerComposit(dest, msg, periodicTime);
+	TickerComposite *tc = new TickerComposite(dest, msg, periodicTime);
 	SystemActor::tcVector.push_back(tc);
 
 	return true;
@@ -31,4 +31,4 @@ SystemActor::~SystemActor() {
 	// TODO Auto-generated destructor stub
 }
 
-std::vector<TickerComposit*> SystemActor::tcVector;
+std::vector<TickerComposite*> SystemActor::tcVector;

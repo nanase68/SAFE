@@ -11,11 +11,11 @@
 #include "mbed.h"
 #include "Actor.h"
 #include <vector>
-class TickerComposit;
+class TickerComposite;
 
 class SystemActor: public Actor {
 private:
-	static vector<TickerComposit*> tcVector;
+	static vector<TickerComposite*> tcVector;
 
 public:
 	bool setPeriodicTask(Actor *dest, Message *msg, float periodicTime);
