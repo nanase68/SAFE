@@ -7,31 +7,31 @@
 GlobalQueue gqueue;
 
 GlobalQueue::GlobalQueue() {
-	vector.clear();
+	messageQueue.clear();
 	//GlobalQueue::gqueue().assign(GLOBAL_QUEUE_SIZE, 0);
 }
 
 Message GlobalQueue::dequeue() {
-	if (vector.empty()) {
+	if (messageQueue.empty()) {
 		// グローバルキューが空
 		// ERROR 空キューをpop
 		exit(0);
 	} else {
 		Message ret;
 
-		ret = vector[0];
-		vector.erase(vector.begin());
+		ret = messageQueue[0];
+		messageQueue.erase(messageQueue.begin());
 
 		return (ret);
 	}
 }
 
 void GlobalQueue::enqueue(Message* m) {
-	vector.push_back(*m);
+	messageQueue.push_back(*m);
 }
 
 bool GlobalQueue::checkQueue() {
-	if (vector.empty()) {
+	if (messageQueue.empty()) {
 		// グローバルキューが空
 		return (false);
 	} else {
