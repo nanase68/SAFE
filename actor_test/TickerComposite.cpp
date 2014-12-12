@@ -11,7 +11,7 @@
 #include "SystemActor.h"
 
 void TickerComposite::autoSend(){
-	sysActor.sendTo(TickerComposite::destination, TickerComposite::message);
+	sysActor.sendToPriorityQueue(TickerComposite::destination, TickerComposite::message);
 }
 
 TickerComposite::TickerComposite(Actor *dest, Message *msg, float periodicTime){
