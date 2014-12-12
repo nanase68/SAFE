@@ -12,7 +12,7 @@ static const std::size_t GLOBAL_QUEUE_SIZE = 100;
 
 class GlobalQueue {
 private:
-	std::vector<Message> vector;
+	std::vector<Message> messageQueue;
 
 public:
 	GlobalQueue();
@@ -21,6 +21,7 @@ public:
 	bool checkQueue();
 };
 
-extern GlobalQueue gqueue;
+extern GlobalQueue globalPriorityQueue;
+extern GlobalQueue globalNormalQueue;
 
 #endif //ACTOR_TEST_GLOBAL_QUEUE_H_

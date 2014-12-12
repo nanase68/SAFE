@@ -8,11 +8,12 @@
 #ifndef ACTOR_H_
 #define ACTOR_H_
 
-//前方参照（インクルードガードで防がれた時のため）
 class Message;
+class GlobalQueue;
 
 class Actor {
 public:
+	bool sendToQueue(Actor *dest, Message *m, GlobalQueue gqueue);
 	bool sendTo(Actor *dest, Message *m);
 	virtual bool receiveMessage(Message*);
 	bool spawnActor();
