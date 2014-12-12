@@ -6,6 +6,7 @@
  */
 
 #include "Message.h"
+#include "Actor.h"
 
 bool Message::dealMessage(){
 	Message::destination->receiveMessage(this);

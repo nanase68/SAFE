@@ -5,7 +5,7 @@
  *      Author: Ys
  */
 
-#include <InputActor.h>
+#include "InputActor.h"
 
 InputActor::InputActor() {
 	// TODO Auto-generated constructor stub

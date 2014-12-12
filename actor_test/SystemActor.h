@@ -8,14 +8,13 @@
 #ifndef SYSTEMACTOR_H_
 #define SYSTEMACTOR_H_
 
-#include "mbed.h"
 #include "Actor.h"
 #include <vector>
 class TickerComposite;
 
 class SystemActor: public Actor {
 private:
-	static vector<TickerComposite*> tcVector;
+	static std::vector<TickerComposite*> tcVector;
 
 public:
 	bool setPeriodicTask(Actor *dest, Message *msg, float periodicTime);
