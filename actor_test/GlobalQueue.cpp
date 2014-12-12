@@ -4,7 +4,8 @@
 
 #include "Message.h"
 
-GlobalQueue gqueue;
+GlobalQueue globalPriorityQueue;
+GlobalQueue globalNormalQueue;
 
 GlobalQueue::GlobalQueue() {
 	messageQueue.clear();

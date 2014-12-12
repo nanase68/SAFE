@@ -21,6 +21,7 @@ public:
 	bool checkQueue();
 };
 
-extern GlobalQueue gqueue;
+extern GlobalQueue globalPriorityQueue;
+extern GlobalQueue globalNormalQueue;
 
 #endif //ACTOR_TEST_GLOBAL_QUEUE_H_
