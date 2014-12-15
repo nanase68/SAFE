@@ -83,7 +83,8 @@ public:
 	LcdPrintActor();
 };
 
-LcdPrintActor::LcdPrintActor() : Actor(){
+LcdPrintActor::LcdPrintActor() :
+		Actor() {
 	lcd.set_auto_up(0);
 }
 
@@ -91,13 +92,13 @@ bool LcdPrintActor::receiveMessage(Message *m) {
 	int p1 = pot1.read_u16();
 	int p2 = pot2.read_u16();
 
-	if (count <= 50) {
-		lcd.locate(0, 0);
-		lcd.printf("Pot1 : %04X ", p1);
-		p1 = p1 * lcd.width() / 0xffff;
-		lcd.fillrect(0, 9, p1, 14, 1);
-		lcd.fillrect(p1 + 1, 9, lcd.width() - 1, 14, 0);
-	}
+	//if (count <= 50) {
+	lcd.locate(0, 0);
+	lcd.printf("Pot1 : %04X ", p1);
+	p1 = p1 * lcd.width() / 0xffff;
+	lcd.fillrect(0, 9, p1, 14, 1);
+	lcd.fillrect(p1 + 1, 9, lcd.width() - 1, 14, 0);
+	//}
 
 	lcd.locate(0, 16);
 	lcd.printf("Pot2 : %04X ", p2);
