@@ -18,7 +18,6 @@ public:
 	GlobalQueue();
 	Message* dequeue();
 	void enqueue(Message*);
-	bool checkQueue();
 };
 
 extern GlobalQueue globalPriorityQueue;
