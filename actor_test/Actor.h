@@ -13,8 +13,9 @@ class GlobalQueue;
 
 class Actor {
 public:
-	bool sendToQueue(Actor *dest, Message *m, GlobalQueue gqueue);
+	bool sendToQueue(Actor *dest, Message *m, GlobalQueue *gqueue);
 	bool sendTo(Actor *dest, Message *m);
+	bool sendToPriorityQueue(Actor *dest, Message *m);
 	virtual bool receiveMessage(Message*);
 	bool spawnActor();
 	bool changeState();

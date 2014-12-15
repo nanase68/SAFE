@@ -17,15 +17,19 @@ bool Actor::receiveMessage(Message* m){
 	return false;
 }
 
-bool Actor::sendToQueue(Actor *dest, Message *m, GlobalQueue gqueue){
+bool Actor::sendToQueue(Actor *dest, Message *m, GlobalQueue *gqueue){
 	m->sender = this;
 	m->destination = dest;
-	gqueue.enqueue(m);
+	gqueue->enqueue(m);
 	return true;
 }
 
 bool Actor::sendTo(Actor *dest, Message* m){
-	this->sendToQueue(dest, m, globalNormalQueue);
+	this->sendToQueue(dest, m, &globalNormalQueue);
+	return true;
+}
+bool Actor::sendToPriorityQueue(Actor *dest, Message *m){
+	this->sendToQueue(dest, m, &globalPriorityQueue);
 	return true;
 }
 
