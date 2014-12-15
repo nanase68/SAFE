@@ -9,6 +9,7 @@
 
 #include "Runtime.h"
 #include "GlobalQueue.h"
+#include "Actor.h"
 #include "Message.h"
 
 Runtime runtime;
@@ -24,6 +25,6 @@ void Runtime::start() {
 			}
 		}
 
-		m->dealMessage();
+		m->destination->receiveMessage(m);
 	}
 }

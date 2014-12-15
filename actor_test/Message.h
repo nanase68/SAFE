@@ -16,7 +16,6 @@ class Actor;
 class Message {
 public:
 	Actor *sender, *destination;
-	bool dealMessage(void);
 
 	Message();
 	Message(Actor*, Actor*);
