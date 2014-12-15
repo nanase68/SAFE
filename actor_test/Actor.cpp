@@ -8,7 +8,7 @@
 #include "Actor.h"
 #include "Message.h"
 #include "GlobalQueue.h"
-
+#include "Runtime.h"
 
 using namespace std;
 
@@ -35,13 +35,8 @@ bool Actor::sendToPriorityQueue(Actor *dest, Message *m){
 
 
 bool Actor::start(){
-	while(1){
-		if(globalPriorityQueue.checkQueue()){
-		}else if(globalNormalQueue.checkQueue()){
-		}
+	runtime.start();
 
-		wait(0.01); // 0.01 sec
-	}
 	return true;
 }
 
