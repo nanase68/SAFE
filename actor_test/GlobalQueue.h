@@ -16,7 +16,7 @@ private:
 
 public:
 	GlobalQueue();
-	Message dequeue();
+	Message* dequeue();
 	void enqueue(Message*);
 	bool checkQueue();
 };
