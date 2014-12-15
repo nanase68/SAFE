@@ -16,7 +16,7 @@ Runtime runtime;
 
 void Runtime::start() {
 	while(1) {
-		Message *m;
+		Message *m = NULL;
 		while(!m) {
 			if((m = globalPriorityQueue.dequeue())) {
 			} else if((m = globalNormalQueue.dequeue())) {
