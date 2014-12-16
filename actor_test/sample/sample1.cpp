@@ -16,18 +16,38 @@
 
 namespace {
 
+// LED
 DigitalOut led1(LED1);
 DigitalOut led2(LED2);
 DigitalOut led3(LED3);
 DigitalOut led4(LED4);
 
+// Analog input
 AnalogIn pot1(p19);
 AnalogIn pot2(p20);
 
+// lcd
 C12832 lcd(p5, p7, p6, p8, p11);
+
+// rgb
+PwmOut r(p23);
+PwmOut g(p24);
+PwmOut b(p25);
+
+static float BRIGHT = 0.9;
+
+// joystick
+BusIn joy(p15, p12, p13, p16); // u d l r
+DigitalIn fire(p14);
+
+// speaker
+PwmOut spkr(p26);
 
 int count = 0;
 
+/*
+ *
+ */
 class MyActor: public Actor {
 public:
 	bool receiveMessage(Message *m);
@@ -51,6 +71,9 @@ bool MyActor::receiveMessage(Message *m) {
 	return false;
 }
 
+/*
+ *
+ */
 class MyActor2: public Actor {
 public:
 	bool receiveMessage(Message *m);
@@ -66,6 +89,9 @@ bool MyActor2::receiveMessage(Message *m) {
 	return false;
 }
 
+/*
+ *
+ */
 class CheckActor: public Actor {
 public:
 	bool receiveMessage(Message *m);
@@ -76,6 +102,9 @@ bool CheckActor::receiveMessage(Message *m) {
 	return false;
 }
 
+/*
+ *
+ */
 class LcdPrintActor: public Actor {
 public:
 	bool receiveMessage(Message*);
@@ -111,17 +140,81 @@ bool LcdPrintActor::receiveMessage(Message *m) {
 	return false;
 }
 
+/*
+ *
+ */
+class RgbBrightenActor: public Actor {
+public:
+	bool receiveMessage(Message* m);
+	RgbBrightenActor();
+};
+RgbBrightenActor::RgbBrightenActor() :
+		Actor() {
+	// rgb off(r, g, b are off if value is 1)
+	r = 1.0;
+	g = 1.0;
+	b = 1.0;
+}
+bool RgbBrightenActor::receiveMessage(Message* m) {
+	if (joy & 0b1000) {
+		r = BRIGHT;
+	} else if (joy & 0b0100) {
+		g = BRIGHT;
+	} else if (joy & 0b0010) {
+		b = BRIGHT;
+	} else if (joy & 0b0001) {
+		r = (1 - (1 - BRIGHT) / 2);
+		b = (1 - (1 - BRIGHT) / 2);
+	} else if (fire) {
+		r = (1 - (1 - BRIGHT) / 3);
+		g = (1 - (1 - BRIGHT) / 3);
+		b = (1 - (1 - BRIGHT) / 3);
+	} else {
+		r = 1.0;
+		g = 1.0;
+		b = 1.0;
+	}
+	return true;
+}
+
+/*
+ *
+ */
+class SpeakerActor: public Actor {
+public:
+	bool receiveMessage(Message* m);
+};
+bool SpeakerActor::receiveMessage(Message *m) {
+	if (fire) {
+		for (float i = 2000.0; i < 10000.0; i += 100) {
+			spkr.period(1.0 / i);
+			spkr = 0.5;
+			wait(0.1);
+		}
+		spkr = 0.0;
+		return true;
+	} else {
+		return false;
+	}
+}
 }	//namespace
 
+/*
+ * Main
+ */
 void sample1() {
 	MyActor a;
 	MyActor2 a2;
 	LcdPrintActor a3;
-	Message m, m2, m3;
+	RgbBrightenActor a4;
+	SpeakerActor a5;
+	Message m, m2, m3, m4, m5;
 	//a2.sendTo(&a2, &m2);
 	sysActor.setPeriodicTask(&a, &m, 1.0);
 	sysActor.setPeriodicTask(&a2, &m2, 2.0);
 	sysActor.setPeriodicTask(&a3, &m3, 0.1);
+	sysActor.setPeriodicTask(&a4, &m4, 0.1);
+	sysActor.setPeriodicTask(&a5, &m5, 0.1);
 
 	cout << "Start!!" << endl;
 	Actor::start();
