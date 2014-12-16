@@ -30,21 +30,26 @@ AnalogIn pot2(p20);
 C12832 lcd(p5, p7, p6, p8, p11);
 
 // rgb
-/**
- class MyPwmOut: public PwmOut{
- public:
- MyPwmOut(PinName pin);
- };
- MyPwmOut::MyPwmOut(PinName pin) : PwmOut(pin){
- write(1.0);
- }
- MyPwmOut r (p23);
- MyPwmOut g (p24);
- MyPwmOut b (p25);
- **/
-PwmOut r(p23);
-PwmOut g(p24);
-PwmOut b(p25);
+class MyPwmOut: public PwmOut {
+public:
+	MyPwmOut(PinName pin);
+    MyPwmOut& operator= (float value) {
+    	PwmOut::operator =(value);
+        return *this;
+    }
+};
+MyPwmOut::MyPwmOut(PinName pin) :
+		PwmOut(pin) {
+	write(1.0);
+}
+MyPwmOut r(p23);
+MyPwmOut g(p24);
+MyPwmOut b(p25);
+/*
+ PwmOut r(p23);
+ PwmOut g(p24);
+ PwmOut b(p25);
+ */
 static float BRIGHT = 0.9;
 
 // joystick
