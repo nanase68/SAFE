@@ -34,7 +34,8 @@ PwmOut r(p23);
 PwmOut g(p24);
 PwmOut b(p25);
 
-static float BRIGHT = 0.9;
+const float BRIGHT = 0.9;
+const float OFF = 1.0;
 
 // joystick
 BusIn joy(p15, p12, p13, p16); // u d l r
@@ -151,9 +152,9 @@ public:
 RgbBrightenActor::RgbBrightenActor() :
 		Actor() {
 	// rgb off(r, g, b are off if value is 1)
-	r = 1.0;
-	g = 1.0;
-	b = 1.0;
+	r = OFF;
+	g = OFF;
+	b = OFF;
 }
 bool RgbBrightenActor::receiveMessage(Message* m) {
 	if (joy & 0b1000) {
@@ -170,9 +171,9 @@ bool RgbBrightenActor::receiveMessage(Message* m) {
 		g = (1 - (1 - BRIGHT) / 3);
 		b = (1 - (1 - BRIGHT) / 3);
 	} else {
-		r = 1.0;
-		g = 1.0;
-		b = 1.0;
+		r = OFF;
+		g = OFF;
+		b = OFF;
 	}
 	return true;
 }
