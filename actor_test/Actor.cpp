@@ -40,7 +40,7 @@ bool Actor::start(){
 	return true;
 }
 
-Actor::Actor() {
+Actor::Actor() : state(RUNNABLE) {
 	// TODO Auto-generated constructor stub
 
 }
