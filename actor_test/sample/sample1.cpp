@@ -47,7 +47,7 @@ PwmOut spkr(p26);
 int count = 0;
 
 /*
- *
+ * LED2,3,4を順番に光らせる
  */
 class MyActor: public Actor {
 public:
@@ -73,7 +73,7 @@ bool MyActor::receiveMessage(Message *m) {
 }
 
 /*
- *
+ * LED1をチカチカさせる
  */
 class MyActor2: public Actor {
 public:
@@ -104,7 +104,7 @@ bool CheckActor::receiveMessage(Message *m) {
 }
 
 /*
- *
+ * アナログ抵抗器の値をディスプレイに表示
  */
 class LcdPrintActor: public Actor {
 public:
@@ -142,7 +142,7 @@ bool LcdPrintActor::receiveMessage(Message *m) {
 }
 
 /*
- *
+ * joystick入力をみてライトを光らせる
  */
 class RgbBrightenActor: public Actor {
 public:
@@ -179,7 +179,7 @@ bool RgbBrightenActor::receiveMessage(Message* m) {
 }
 
 /*
- *
+ * joystickのfireを感知して、音を鳴らす
  */
 class SpeakerActor: public Actor {
 public:
