@@ -33,7 +33,6 @@ C12832 lcd(p5, p7, p6, p8, p11);
 PwmOut r(p23);
 PwmOut g(p24);
 PwmOut b(p25);
-
 const float BRIGHT = 0.9;
 const float OFF = 1.0;
 
@@ -43,8 +42,11 @@ DigitalIn fire(p14);
 
 // speaker
 PwmOut spkr(p26);
-
 int count = 0;
+
+// Bluetooth serial port
+Serial bt_serial(p9, p10);  // tx, rx
+bool sendFlag = false;
 
 /*
  * LED2,3,4を順番に光らせる
@@ -187,15 +189,30 @@ public:
 };
 bool SpeakerActor::receiveMessage(Message *m) {
 	if (fire) {
+		sendFlag = true;
 		for (float i = 2000.0; i < 10000.0; i += 100) {
 			spkr.period(1.0 / i);
 			spkr = 0.5;
 			wait(0.1);
 		}
 		spkr = 0.0;
+		sendFlag = false;
 		return true;
 	} else {
 		return false;
+	}
+}
+/*
+ *
+ */
+class BluetoothSendActor: public Actor {
+public:
+	bool receiveMessage(Message* m);
+};
+bool BluetoothSendActor::receiveMessage(Message *m) {
+	if (fire) {
+		bt_serial.baud(115200);
+		bt_serial.printf("Hello World\n");
 	}
 }
 }	//namespace
@@ -209,13 +226,15 @@ void sample1() {
 	LcdPrintActor a3;
 	RgbBrightenActor a4;
 	SpeakerActor a5;
-	Message m, m2, m3, m4, m5;
+	BluetoothSendActor a6;
+	Message m, m2, m3, m4, m5, m6;
 	//a2.sendTo(&a2, &m2);
 	sysActor.setPeriodicTask(&a, &m, 1.0);
 	sysActor.setPeriodicTask(&a2, &m2, 2.0);
 	sysActor.setPeriodicTask(&a3, &m3, 0.1);
 	sysActor.setPeriodicTask(&a4, &m4, 0.1);
 	sysActor.setPeriodicTask(&a5, &m5, 0.1);
+	sysActor.setPeriodicTask(&a6, &m6, 1.0);
 
 	cout << "Start!!" << endl;
 	Actor::start();
