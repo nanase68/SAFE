@@ -16,20 +16,39 @@
 Runtime runtime;
 tt_context_t mainContext;
 
+
 void Runtime::start() {
 	SchedulerThread th;
-	th.awake(&mainContext);
+	th.start();
 }
 
 
-SchedulerThread::SchedulerThread() {
-	tt_stack_t stack = malloc(TT_STACK_SIZE);
-	SchedulerThread::context =
-			tt_new_context(stack + TT_STACK_DEPTH, &SchedulerThread::run, NULL);
+TThread::TThread(bool isMainThread) {
+	if(isMainThread) {
+		context = NULL;
+	} else {
+		tt_stack_t stack = malloc(TT_STACK_SIZE);
+		context = tt_new_context(stack + TT_STACK_DEPTH, &starter, this);
+	}
 }
 
 
-void SchedulerThread::run(void* arg) {
+void TThread::starter(void *thisThread) {
+	TThread *th = (TThread *)thisThread;
+	th->run();
+}
+
+
+void TThread::awake(tt_context_t *oldContext) {
+	tt_swtch(oldContext, context);
+}
+
+
+SchedulerThread::SchedulerThread() : TThread(true) {
+}
+
+
+void SchedulerThread::run() {
 	while(1) {
 		Message *m = NULL;
 		GlobalQueue *queue;
@@ -52,7 +71,6 @@ void SchedulerThread::run(void* arg) {
 }
 
 
-void SchedulerThread::awake(tt_context_t *oldContext) {
-	tt_swtch(oldContext, context);
+void SchedulerThread::start() {
+	run();
 }
-

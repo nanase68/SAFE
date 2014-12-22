@@ -17,13 +17,25 @@ public:
 };
 
 
-class SchedulerThread {
+class TThread {
 private:
+	static void starter(void *arg);
+	virtual void run() = 0;
+protected:
 	tt_context_t context;
-	static void run(void *arg);
+	TThread(bool isMainThread = false);
+public:
+	/** Switch to this thread */
+	void awake(tt_context_t *context);
+};
+
+
+class SchedulerThread : public TThread {
+private:
+	void run();
 public:
 	SchedulerThread();
-	void awake(tt_context_t *oldContext);
+	void start();
 };
 
 
