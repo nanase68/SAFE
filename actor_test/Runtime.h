@@ -17,12 +17,12 @@ public:
 };
 
 
-class RuntimeThread {
+class SchedulerThread {
 private:
 	tt_context_t context;
 	static void run(void *arg);
 public:
-	RuntimeThread();
+	SchedulerThread();
 	void awake(tt_context_t *oldContext);
 };
 

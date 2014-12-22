@@ -17,19 +17,19 @@ Runtime runtime;
 tt_context_t mainContext;
 
 void Runtime::start() {
-	RuntimeThread th;
+	SchedulerThread th;
 	th.awake(&mainContext);
 }
 
 
-RuntimeThread::RuntimeThread() {
+SchedulerThread::SchedulerThread() {
 	tt_stack_t stack = malloc(TT_STACK_SIZE);
-	RuntimeThread::context =
-			tt_new_context(stack + TT_STACK_DEPTH, &RuntimeThread::run, NULL);
+	SchedulerThread::context =
+			tt_new_context(stack + TT_STACK_DEPTH, &SchedulerThread::run, NULL);
 }
 
 
-void RuntimeThread::run(void* arg) {
+void SchedulerThread::run(void* arg) {
 	while(1) {
 		Message *m = NULL;
 		GlobalQueue *queue;
@@ -52,7 +52,7 @@ void RuntimeThread::run(void* arg) {
 }
 
 
-void RuntimeThread::awake(tt_context_t *oldContext) {
+void SchedulerThread::awake(tt_context_t *oldContext) {
 	tt_swtch(oldContext, context);
 }
 
