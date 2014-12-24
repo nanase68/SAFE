@@ -46,7 +46,6 @@ int count = 0;
 
 // Bluetooth serial port
 Serial bt_serial(p9, p10);  // tx, rx
-bool sendFlag = false;
 
 /*
  * LED2,3,4を順番に光らせる
@@ -189,14 +188,12 @@ public:
 };
 bool SpeakerActor::receiveMessage(Message *m) {
 	if (fire) {
-		sendFlag = true;
 		for (float i = 2000.0; i < 10000.0; i += 100) {
 			spkr.period(1.0 / i);
 			spkr = 0.5;
 			wait(0.1);
 		}
 		spkr = 0.0;
-		sendFlag = false;
 		return true;
 	} else {
 		return false;
@@ -210,10 +207,12 @@ public:
 	bool receiveMessage(Message* m);
 };
 bool BluetoothSendActor::receiveMessage(Message *m) {
-	if (fire) {
+	if (joy != 0b0000) {
+		// joystickが何れかの方向に倒されていたら
 		bt_serial.baud(115200);
 		bt_serial.printf("Hello World\n");
 	}
+	return true;
 }
 }	//namespace
 
