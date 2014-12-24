@@ -15,6 +15,7 @@ class Actor {
 private:
 	enum State { RUNNABLE, SENDWAIT } state;
 	friend class SchedulerThread;
+	friend class MessageHandlerThread;
 public:
 	bool sendToQueue(Actor *dest, Message *m, GlobalQueue *gqueue);
 	bool sendTo(Actor *dest, Message *m);

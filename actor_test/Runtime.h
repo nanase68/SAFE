@@ -10,6 +10,9 @@
 
 #include "tthread.h"
 
+class Actor;
+class Message;
+
 class Runtime {
 private:
 public:
@@ -39,6 +42,18 @@ public:
 };
 
 
+class MessageHandlerThread : public TThread {
+private:
+	void run();
+public:
+	Actor *running;
+	Message *msg;
+	MessageHandlerThread();
+	enum State {READY, BUSY} state;
+};
+
+
 extern Runtime runtime;
+extern SchedulerThread scheduler;
 
 #endif /* RUNTIME_H_ */

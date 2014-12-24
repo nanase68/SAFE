@@ -5,6 +5,8 @@
  *      Author: atsushi
  */
 
+#include <assert.h>
+
 #include "mbed.h"
 
 #include "Runtime.h"
@@ -14,12 +16,12 @@
 #include "tthread.h"
 
 Runtime runtime;
-tt_context_t mainContext;
+SchedulerThread scheduler;
+MessageHandlerThread handler;
 
 
 void Runtime::start() {
-	SchedulerThread th;
-	th.start();
+	scheduler.start();
 }
 
 
@@ -63,7 +65,8 @@ void SchedulerThread::run() {
 		}
 
 		if(m->sender->state == Actor::RUNNABLE) {
-			m->destination->receiveMessage(m);
+			handler.msg = m;
+			handler.awake(&context);
 		} else {
 			queue->enqueue(m);
 		}
@@ -73,4 +76,26 @@ void SchedulerThread::run() {
 
 void SchedulerThread::start() {
 	run();
+}
+
+
+MessageHandlerThread::MessageHandlerThread() : TThread(), state(READY) {
+}
+
+
+void MessageHandlerThread::run() {
+	while(1) {
+		assert(msg != NULL);
+		assert(state == READY);
+		assert(msg->destination->state == Actor::RUNNABLE);
+
+		state = BUSY;
+		running = msg->sender;
+
+		msg->destination->receiveMessage(msg);
+
+		state = READY;
+
+		scheduler.awake(&context);
+	}
 }
