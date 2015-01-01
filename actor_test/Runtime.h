@@ -22,11 +22,13 @@ public:
 
 class TThread {
 private:
+	tt_stack_t stack;
 	static void starter(void *arg);
 	virtual void run() = 0;
 protected:
 	tt_context_t context;
 	TThread(bool isMainThread = false);
+	virtual ~TThread();
 public:
 	/** Switch to this thread */
 	void awake(tt_context_t *context);
