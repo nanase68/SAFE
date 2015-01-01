@@ -29,7 +29,9 @@ TThread::TThread(bool isMainThread) {
 	if(isMainThread) {
 		context = NULL;
 	} else {
+		printf("malloc in TThread... ");
 		tt_stack_t stack = malloc(TT_STACK_SIZE);
+		printf("OK!\n");
 		context = tt_new_context(stack + TT_STACK_DEPTH, &starter, this);
 	}
 }

@@ -6,7 +6,7 @@
 #ifndef TTHREAD_H_
 #define TTHREAD_H_
 
-#define TT_STACK_SIZE 4096
+#define TT_STACK_SIZE 1024
 #define TT_STACK_DEPTH (TT_STACK_SIZE / sizeof(void *))
 
 #ifdef __cplusplus
