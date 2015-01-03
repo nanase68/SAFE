@@ -35,15 +35,6 @@ public:
 };
 
 
-class SchedulerThread : public TThread {
-private:
-	void run();
-public:
-	SchedulerThread();
-	void start();
-};
-
-
 class MessageHandlerThread : public TThread {
 private:
 	void run();
@@ -52,6 +43,15 @@ public:
 	Message *msg;
 	MessageHandlerThread();
 	enum State {READY, BUSY} state;
+};
+
+
+class SchedulerThread : public TThread {
+private:
+	void run();
+public:
+	SchedulerThread();
+	void start();
 };
 
 
