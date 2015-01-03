@@ -58,6 +58,26 @@ SchedulerThread::SchedulerThread() :
 }
 
 
+MessageHandlerThread *SchedulerThread::findFreeHandler() {
+	MessageHandlerThread *th = msgHandlerList, *prev = NULL;
+
+	if(th == NULL) {
+		return (msgHandlerList = new MessageHandlerThread);
+	}
+	while(th != NULL) {
+		if(th->state == MessageHandlerThread::READY) {
+			return th;
+		} else {
+			prev = th;
+			th = (MessageHandlerThread *)(prev->next);
+		}
+	}
+	th = new MessageHandlerThread;
+	prev->next = th;
+	return th;
+}
+
+
 void SchedulerThread::run() {
 	while(1) {
 		Message *m = NULL;
@@ -73,7 +93,7 @@ void SchedulerThread::run() {
 		}
 
 		if(m->sender->state == Actor::RUNNABLE) {
-			MessageHandlerThread *handler = msgHandlerList;
+			MessageHandlerThread *handler = findFreeHandler();
 
 			handler->msg = m;
 			handler->awake(&context);

@@ -26,12 +26,12 @@ private:
 	static void starter(void *arg);
 	virtual void run() = 0;
 protected:
-	TThread *next;
 	tt_context_t context;
 	TThread(bool isMainThread = false);
 	virtual ~TThread();
 public:
 	/** Switch to this thread */
+	TThread *next;
 	void awake(tt_context_t *context);
 };
 
@@ -51,6 +51,7 @@ class SchedulerThread : public TThread {
 private:
 	MessageHandlerThread *msgHandlerList;
 	void run();
+	MessageHandlerThread *findFreeHandler();
 public:
 	SchedulerThread();
 	void start();
