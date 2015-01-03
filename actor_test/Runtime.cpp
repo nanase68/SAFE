@@ -25,7 +25,7 @@ void Runtime::start() {
 }
 
 
-TThread::TThread(bool isMainThread) {
+TThread::TThread(bool isMainThread) : next(NULL) {
 	if(isMainThread) {
 		context = NULL;
 	} else {

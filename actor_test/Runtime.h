@@ -26,6 +26,7 @@ private:
 	static void starter(void *arg);
 	virtual void run() = 0;
 protected:
+	TThread *next;
 	tt_context_t context;
 	TThread(bool isMainThread = false);
 	virtual ~TThread();
@@ -48,6 +49,7 @@ public:
 
 class SchedulerThread : public TThread {
 private:
+	MessageHandlerThread *msgHandlerList;
 	void run();
 public:
 	SchedulerThread();
