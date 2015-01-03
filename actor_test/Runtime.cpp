@@ -17,7 +17,6 @@
 
 Runtime runtime;
 SchedulerThread scheduler;
-MessageHandlerThread handler;
 
 
 void Runtime::start() {
@@ -53,7 +52,9 @@ void TThread::awake(tt_context_t *oldContext) {
 }
 
 
-SchedulerThread::SchedulerThread() : TThread(true) {
+SchedulerThread::SchedulerThread() :
+		TThread(true),
+		msgHandlerList(new MessageHandlerThread) {
 }
 
 
@@ -72,8 +73,10 @@ void SchedulerThread::run() {
 		}
 
 		if(m->sender->state == Actor::RUNNABLE) {
-			handler.msg = m;
-			handler.awake(&context);
+			MessageHandlerThread *handler = msgHandlerList;
+
+			handler->msg = m;
+			handler->awake(&context);
 		} else {
 			queue->enqueue(m);
 		}
