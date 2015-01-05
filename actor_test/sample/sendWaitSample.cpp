@@ -15,11 +15,6 @@
 
 namespace {
 
-// LED
-DigitalOut led1(LED1);
-DigitalOut led2(LED2);
-DigitalOut led3(LED3);
-DigitalOut led4(LED4);
 
 enum Order {TurnOn, TurnOff};
 enum ledState {LedIsOn, LedIsOff};
@@ -105,6 +100,11 @@ bool WorkerActor::receiveMessage(Message *m) {
 } // namespace (unnamed)
 
 void sendWaitSample() {
+	DigitalOut led1(LED1);
+	DigitalOut led2(LED2);
+	DigitalOut led3(LED3);
+	DigitalOut led4(LED4);
+
 	BossActor b(led1);
 	WorkerActor w0(0, led2, b);
 	WorkerActor w1(1, led3, b);
