@@ -28,6 +28,12 @@ bool Actor::sendTo(Actor *dest, Message* m){
 	this->sendToQueue(dest, m, &globalNormalQueue);
 	return true;
 }
+
+Message *Actor::sendWait(Actor *dest, Message* m){
+	this->sendTo(dest, m);
+	return NULL;
+}
+
 bool Actor::sendToPriorityQueue(Actor *dest, Message *m){
 	this->sendToQueue(dest, m, &globalPriorityQueue);
 	return true;

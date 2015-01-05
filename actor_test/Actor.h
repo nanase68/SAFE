@@ -19,6 +19,7 @@ private:
 public:
 	bool sendToQueue(Actor *dest, Message *m, GlobalQueue *gqueue);
 	bool sendTo(Actor *dest, Message *m);
+	Message *sendWait(Actor *dest, Message *m);
 	bool sendToPriorityQueue(Actor *dest, Message *m);
 	virtual bool receiveMessage(Message*);
 	bool spawnActor();
