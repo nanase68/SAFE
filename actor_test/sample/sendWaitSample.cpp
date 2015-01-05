@@ -40,7 +40,7 @@ private:
 	DigitalOut &led;
 	BossActor &boss;
 public:
-	WorkerActor(int id, DigitalOut &led, BossActor boss) :
+	WorkerActor(int id, DigitalOut &led, BossActor &boss) :
 		id(id), led(led), boss(boss) {};
 	bool receiveMessage(Message *m);
 };
@@ -50,12 +50,14 @@ bool BossActor::receiveMessage(Message *m) {
 	static int timing[3] = {1, 2, 3};
 	static bool isOn[3] = {};
 	static int count = 0;
-	static MessageInt mOrder[3];
+	static MessageInt mTurnOn(NULL, NULL, TurnOn);
+	static MessageInt mTurnOff(NULL, NULL, TurnOff);
 
 	// Sender is WorkerActor
 	for(int i=0; i < 3; ++i) {
 		if(m->sender == w[i]) {
 			isOn[i] = true;
+			delete m;
 			return true;
 		}
 	}
@@ -68,8 +70,10 @@ bool BossActor::receiveMessage(Message *m) {
 
 	for(int i=0; i < 3; ++i) {
 		if(count % timing[i] == 0) {
-			mOrder[i] = isOn[i] ? TurnOff : TurnOn;
-			sendTo(w[i], &mOrder[i]);
+			MessageInt *msg = new MessageInt;
+			*msg = isOn[i] ? mTurnOff : mTurnOn;
+			sendTo(w[i], msg);
+			if(isOn[i]) { isOn[i] = false; }
 		}
 	}
 
@@ -78,21 +82,25 @@ bool BossActor::receiveMessage(Message *m) {
 
 bool WorkerActor::receiveMessage(Message *m) {
 	static MessageInt ledIsOn;
+	Message *send;
 
 	int order = (((MessageInt *)m)->get_content());
 	if(order == TurnOn) {
 		led = 1;
 
+		send = new MessageInt;
+		*send = ledIsOn;
+
 		printf("Worker%d: sendWait\n", id);
 		//Wait until Boss order me to turn off
-		MessageInt *re = (MessageInt *) sendWait(&boss, &ledIsOn);
+		MessageInt *re = (MessageInt *) sendWait(&boss, send);
 		printf("Worker%d: receive\n", id);
 
 		//assert(re->get_content() == TurnOff);
 		led = 0;
-
-		return true;
 	}
+
+	delete m;
 	return true;
 }
 
