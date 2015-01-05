@@ -1,21 +1,22 @@
 #ifndef ACTOR_TEST_GLOBAL_QUEUE_H_
 #define ACTOR_TEST_GLOBAL_QUEUE_H_
 
-
-// vectorを使えるようにする
-#include <vector>
-
+#include <stdlib.h>
 class Message;
 
-static const std::size_t GLOBAL_QUEUE_SIZE = 100;
+static const size_t GLOBAL_QUEUE_SIZE = 100;
 
 
 class GlobalQueue {
 private:
-	std::vector<Message*> messageQueue;
+	int size;
+	Message **bufHead;
+	Message **bufTail;
+	Message **head;
+	Message **tail;
 
 public:
-	GlobalQueue();
+	GlobalQueue(size_t size = GLOBAL_QUEUE_SIZE);
 	Message* dequeue();
 	void enqueue(Message*);
 };
