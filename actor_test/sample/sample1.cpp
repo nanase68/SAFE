@@ -30,9 +30,7 @@ AnalogIn pot2(p20);
 C12832 lcd(p5, p7, p6, p8, p11);
 
 // rgb
-PwmOut r(p23);
-PwmOut g(p24);
-PwmOut b(p25);
+// rgbの宣言はクラス宣言で行う
 const float BRIGHT = 0.9;
 const float OFF = 1.0;
 
@@ -149,9 +147,12 @@ class RgbBrightenActor: public Actor {
 public:
 	bool receiveMessage(Message* m);
 	RgbBrightenActor();
+	PwmOut r;
+	PwmOut g;
+	PwmOut b;
 };
 RgbBrightenActor::RgbBrightenActor() :
-		Actor() {
+		Actor(), r(PwmOut(p23)), g(PwmOut(p24)), b(PwmOut(p25)) {
 	// rgb off(r, g, b are off if value is 1)
 	r = OFF;
 	g = OFF;
