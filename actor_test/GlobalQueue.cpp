@@ -7,10 +7,10 @@
 GlobalQueue globalPriorityQueue;
 GlobalQueue globalNormalQueue;
 
-GlobalQueue::GlobalQueue(size_t size) :
-		size(size),
-		bufHead((Message **)malloc(sizeof(Message*) * size)),
-		bufTail(bufHead + size),
+GlobalQueue::GlobalQueue(size_t maxSize) :
+		maxSize(maxSize),
+		bufHead((Message **)malloc(sizeof(Message*) * maxSize)),
+		bufTail(bufHead + maxSize),
 		head(NULL),
 		tail(NULL) {
 
@@ -65,4 +65,13 @@ void GlobalQueue::enqueue(Message* m) {
 	__enable_irq();
 
 	return;
+}
+
+int GlobalQueue::size() {
+	if(!head) {
+		return 0;
+	} else {
+		int c = tail - head + 1;
+		return (c > 0) ? c : c + maxSize;
+	}
 }

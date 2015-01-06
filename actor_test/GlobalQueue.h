@@ -9,16 +9,17 @@ static const size_t GLOBAL_QUEUE_SIZE = 100;
 
 class GlobalQueue {
 private:
-	int size;
+	int maxSize;
 	Message **bufHead;
 	Message **bufTail;
 	Message **head;
 	Message **tail;
 
 public:
-	GlobalQueue(size_t size = GLOBAL_QUEUE_SIZE);
+	GlobalQueue(size_t maxSize = GLOBAL_QUEUE_SIZE);
 	Message* dequeue();
 	void enqueue(Message*);
+	int size();
 };
 
 extern GlobalQueue globalPriorityQueue;
