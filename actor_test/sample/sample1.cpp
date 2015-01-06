@@ -56,7 +56,7 @@ public:
 };
 
 bool MyActor::receiveMessage(Message *m) {
-	cout << "receiveMessage" << endl;
+	//cout << "receiveMessage" << endl;
 
 	if ((led2 == 0) && (led3 == 0) && (led4 == 0)) {
 		led2 = 1;
@@ -82,7 +82,7 @@ public:
 };
 
 bool MyActor2::receiveMessage(Message *m) {
-	cout << "receiveMessage2" << endl;
+	//cout << "receiveMessage2" << endl;
 
 	led1 = !led1;
 
@@ -216,15 +216,16 @@ Rn42SlaveActor::Rn42SlaveActor() {
 	pc.baud(115200);
 }
 bool Rn42SlaveActor::receiveMessage(Message *m) {
-	if (pc.readable()) {
-		RN42.putc(pc.getc());
-	}
-	if (RN42.readable()) {
-		pc.putc(RN42.getc());
-	}
 	if (joy != 0b0000) {
 		Rn42SlaveActor::RN42_reset();
 	}
+	while (pc.readable()) {
+		RN42.putc(pc.getc());
+	}
+	while (RN42.readable()) {
+		pc.putc(RN42.getc());
+	}
+
 	return true;
 }
 short Rn42SlaveActor::RN42_reset(void)
