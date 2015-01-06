@@ -20,6 +20,13 @@ TT_SWTCH:
 
 	push	{r0, r4-r7, lr}		@ No one use this r0
 
+	mov	r2, r8
+	mov	r3, r9
+	mov	r4, r10
+	mov	r5, r11
+	mov	r6, r12
+	push	{r2-r6}
+
         ## Switch stacks
 #        movl %esp, (%eax)       # *from = sp
 	mov r2, sp
@@ -39,4 +46,13 @@ TT_SWTCH:
 #        popl %ebp
 
 #        ret
+
+	pop {r2-r6}
+	mov	r8, r2
+	mov	r9, r3
+	mov	r10, r4
+	mov	r11, r5
+	mov	r12, r6
+
+
 	pop	{r0, r4-r7, pc}		@ New tthread use this r0

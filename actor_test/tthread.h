@@ -16,7 +16,12 @@ extern "C" {
 typedef void *tt_stack_t;
 
 typedef struct tt_context {
-	void *arg;  // r0
+    void *r8;
+    void *r9;
+    void *r10;
+    void *r11;
+    void *r12;
+    void *arg;  // r0
     void *r4;
     void *r5;
     void *r6;
