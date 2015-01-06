@@ -224,23 +224,23 @@ short Rn42SlaveActor::RN42_reset(void) {
 	wait_ms(500);
 	RN42_reset_pin = 1;
 	wait(2);
-	lcd2.printf("checking reset");
+	pc.printf("checking reset\n");
 	RN42.printf("$$$");
 	for (i = 0; i < 3; i++) {
 		buff[i] = RN42.getc();
 	}
-	pc2.printf("buffer = %s\n", buff);
+	pc.printf("buffer = %s\n", buff);
 	if ((buff[0] == 67) && (buff[1] == 77) && (buff[2] == 68)) { //CMD
 		RN42.printf("---\n");
 		while (RN42.getc() != 68)
 			;
 		while (RN42.getc() != 10)
 			;
-		lcd2.printf("reset successful");
+		pc.printf("reset successful\n");
 		return 1;
 	}
 
-	lcd2.printf("reset failed...");
+	pc.printf("reset failed...\n");
 	return 0;
 }
 }	//namespace
@@ -264,7 +264,7 @@ void sample1() {
 	sysActor.setPeriodicTask(&a5, &m5, 0.1);
 	sysActor.setPeriodicTask(&a6, &m6, 0.1);
 
-	printf("Start!!");
+	printf("Start!!\n");
 	Actor::start();
 	return;
 }
