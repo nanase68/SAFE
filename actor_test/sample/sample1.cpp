@@ -42,8 +42,10 @@ DigitalIn fire(p14);
 PwmOut spkr(p26);
 int count = 0;
 
-// Bluetooth serial port
-Serial bt_serial(p9, p10);  // tx, rx
+// Rn42
+Serial RN42(p9, p10);
+Serial pc(USBTX, USBRX);
+DigitalOut RN42_reset_pin(p30);
 
 /*
  * LED2,3,4を順番に光らせる
@@ -210,10 +212,59 @@ public:
 bool BluetoothSendActor::receiveMessage(Message *m) {
 	if (joy != 0b0000) {
 		// joystickが何れかの方向に倒されていたら
-		bt_serial.baud(115200);
-		bt_serial.printf("Hello World\n");
+		RN42.baud(115200);
+		RN42.printf("Hello World\n");
 	}
 	return true;
+}
+
+class Rn42SlaveActor: public Actor {
+public:
+	Rn42SlaveActor();
+	bool receiveMessage(Message* m);
+	short RN42_reset();
+};
+Rn42SlaveActor::Rn42SlaveActor() {
+	RN42.baud(115200);
+	pc.baud(115200);
+}
+bool Rn42SlaveActor::receiveMessage(Message *m) {
+	if (pc.readable()) {
+		RN42.putc(pc.getc());
+	}
+	if (RN42.readable()) {
+		pc.putc(RN42.getc());
+	}
+	if (joy != 0b0000) {
+		Rn42SlaveActor::RN42_reset();
+	}
+	return true;
+}
+short Rn42SlaveActor::RN42_reset(void)
+{
+    char buff[3];
+    short i=0;
+
+    RN42_reset_pin = 0;
+    wait_ms(500);
+    RN42_reset_pin = 1;
+    wait(2);
+    //lcd2.printf("checking reset");
+    RN42.printf("$$$");
+    for(i=0; i<3; i++) {
+        buff[i] = RN42.getc();
+    }
+   // pc2.printf("buffer = %s\n",buff);
+    if((buff[0] == 67) && (buff[1] == 77) && (buff[2] == 68)) { //CMD
+        RN42.printf("---\n");
+        while(RN42.getc() != 68);
+        while(RN42.getc() != 10);
+       // lcd2.printf("reset successful");
+        return 1;
+    }
+
+    //lcd2.printf("reset failed...");
+    return 0;
 }
 }	//namespace
 
@@ -226,7 +277,8 @@ void sample1() {
 	LcdPrintActor a3;
 	RgbBrightenActor a4;
 	SpeakerActor a5;
-	BluetoothSendActor a6;
+	//BluetoothSendActor a6;
+	Rn42SlaveActor a6;
 	Message m, m2, m3, m4, m5, m6;
 	//a2.sendTo(&a2, &m2);
 	sysActor.setPeriodicTask(&a, &m, 1.0);
@@ -234,7 +286,7 @@ void sample1() {
 	sysActor.setPeriodicTask(&a3, &m3, 0.1);
 	sysActor.setPeriodicTask(&a4, &m4, 0.1);
 	sysActor.setPeriodicTask(&a5, &m5, 0.1);
-	sysActor.setPeriodicTask(&a6, &m6, 1.0);
+	sysActor.setPeriodicTask(&a6, &m6, 0.1);
 
 	cout << "Start!!" << endl;
 	Actor::start();
