@@ -5,8 +5,6 @@
  *      Author: Ys
  */
 
-#include <iostream>
-
 #include "Actor.h"
 #include "Message.h"
 #include "SystemActor.h"
@@ -30,11 +28,9 @@ AnalogIn pot2(p20);
 C12832 lcd(p5, p7, p6, p8, p11);
 
 // rgb
-PwmOut r(p23);
-PwmOut g(p24);
-PwmOut b(p25);
-
-static float BRIGHT = 0.9;
+// rgbの宣言はクラス宣言で行う
+const float BRIGHT = 0.9;
+const float OFF = 1.0;
 
 // joystick
 BusIn joy(p15, p12, p13, p16); // u d l r
@@ -42,11 +38,15 @@ DigitalIn fire(p14);
 
 // speaker
 PwmOut spkr(p26);
-
 int count = 0;
 
+// Rn42
+Serial RN42(p9, p10);
+Serial pc(USBTX, USBRX);
+DigitalOut RN42_reset_pin(p30);
+
 /*
- *
+ * LED2,3,4を順番に光らせる
  */
 class MyActor: public Actor {
 public:
@@ -54,8 +54,6 @@ public:
 };
 
 bool MyActor::receiveMessage(Message *m) {
-	cout << "receiveMessage" << endl;
-
 	if ((led2 == 0) && (led3 == 0) && (led4 == 0)) {
 		led2 = 1;
 	} else {
@@ -64,15 +62,11 @@ bool MyActor::receiveMessage(Message *m) {
 		led3 = led2;
 		led2 = temp;
 	}
-
-	//同じメッセージ使い回し（手抜き）
-	//sendTo(this, m);
-
 	return false;
 }
 
 /*
- *
+ * LED1をチカチカさせる
  */
 class MyActor2: public Actor {
 public:
@@ -80,12 +74,7 @@ public:
 };
 
 bool MyActor2::receiveMessage(Message *m) {
-	cout << "receiveMessage2" << endl;
-
 	led1 = !led1;
-
-	//this->sendTo(this, m);
-
 	return false;
 }
 
@@ -103,7 +92,7 @@ bool CheckActor::receiveMessage(Message *m) {
 }
 
 /*
- *
+ * アナログ抵抗器の値をディスプレイに表示
  */
 class LcdPrintActor: public Actor {
 public:
@@ -141,19 +130,22 @@ bool LcdPrintActor::receiveMessage(Message *m) {
 }
 
 /*
- *
+ * joystick入力をみてライトを光らせる
  */
 class RgbBrightenActor: public Actor {
 public:
 	bool receiveMessage(Message* m);
 	RgbBrightenActor();
+	PwmOut r;
+	PwmOut g;
+	PwmOut b;
 };
 RgbBrightenActor::RgbBrightenActor() :
-		Actor() {
+		Actor(), r(PwmOut(p23)), g(PwmOut(p24)), b(PwmOut(p25)) {
 	// rgb off(r, g, b are off if value is 1)
-	r = 1.0;
-	g = 1.0;
-	b = 1.0;
+	r = OFF;
+	g = OFF;
+	b = OFF;
 }
 bool RgbBrightenActor::receiveMessage(Message* m) {
 	if (joy & 0b1000) {
@@ -170,15 +162,15 @@ bool RgbBrightenActor::receiveMessage(Message* m) {
 		g = (1 - (1 - BRIGHT) / 3);
 		b = (1 - (1 - BRIGHT) / 3);
 	} else {
-		r = 1.0;
-		g = 1.0;
-		b = 1.0;
+		r = OFF;
+		g = OFF;
+		b = OFF;
 	}
 	return true;
 }
 
 /*
- *
+ * joystickのfireを感知して、音を鳴らす
  */
 class SpeakerActor: public Actor {
 public:
@@ -197,6 +189,63 @@ bool SpeakerActor::receiveMessage(Message *m) {
 		return false;
 	}
 }
+/*
+ *
+ */
+class Rn42SlaveActor: public Actor {
+public:
+	Rn42SlaveActor();
+	bool receiveMessage(Message* m);
+	short RN42_reset();
+};
+Rn42SlaveActor::Rn42SlaveActor() {
+	RN42.baud(115200);
+	pc.baud(115200);
+}
+bool Rn42SlaveActor::receiveMessage(Message *m) {
+	if (joy != 0b0000) {
+		Rn42SlaveActor::RN42_reset();
+	}
+	while (pc.readable()) {
+		RN42.putc(pc.getc());
+	}
+	while (RN42.readable()) {
+		pc.putc(RN42.getc());
+	}
+
+	//printf("#");
+	return true;
+}
+short Rn42SlaveActor::RN42_reset(void) {
+	char buff[3];
+	short i = 0;
+
+	RN42_reset_pin = 0;
+	wait_ms(500);
+	RN42_reset_pin = 1;
+	wait(2);
+	pc.printf("checking reset\n");
+	RN42.printf("$$$");
+	for (i = 0; i < 3; i++) {
+		buff[i] = RN42.getc();
+	}
+	/*
+	pc.printf("buffer = %s\n", buff);
+	if ((buff[0] == 67) && (buff[1] == 77) && (buff[2] == 68)) { //CMD
+		RN42.printf("---\n");
+		while (RN42.getc() != 68)
+			;
+		while (RN42.getc() != 10)
+			;
+		pc.printf("reset successful\n");
+		return 1;
+	}
+
+	 */
+	RN42.printf("---\n");
+	//pc.printf("reset failed...\n");
+	return 0;
+}
 }	//namespace
 
 /*
@@ -208,15 +257,17 @@ void sample1() {
 	LcdPrintActor a3;
 	RgbBrightenActor a4;
 	SpeakerActor a5;
-	Message m, m2, m3, m4, m5;
+	Rn42SlaveActor a6;
+	Message m, m2, m3, m4, m5, m6;
 	//a2.sendTo(&a2, &m2);
 	sysActor.setPeriodicTask(&a, &m, 1.0);
 	sysActor.setPeriodicTask(&a2, &m2, 2.0);
 	sysActor.setPeriodicTask(&a3, &m3, 0.1);
 	sysActor.setPeriodicTask(&a4, &m4, 0.1);
 	sysActor.setPeriodicTask(&a5, &m5, 0.1);
+	sysActor.setPeriodicTask(&a6, &m6, 0.1);
 
-	cout << "Start!!" << endl;
+	printf("Start!!\n");
 	Actor::start();
 	return;
 }
