@@ -78,6 +78,20 @@ MessageHandlerThread *SchedulerThread::findFreeHandler() {
 }
 
 
+MessageHandlerThread *SchedulerThread::findWaitingHandler(Actor *actor) {
+	MessageHandlerThread *th = msgHandlerList;
+
+	while(th != NULL) {
+		if(th->running == actor) {
+			break;
+		} else {
+			th = (MessageHandlerThread *)(th->next);
+		}
+	}
+	return th;
+}
+
+
 void SchedulerThread::run() {
 	while(1) {
 		Message *m = NULL;
@@ -99,6 +113,14 @@ void SchedulerThread::run() {
 			runningHandler->awake(&context);
 
 			runningHandler = NULL;
+		} else if(m->destination->state == Actor::SENDWAIT) {
+			MessageHandlerThread *waitingHandler;
+
+			waitingHandler = findWaitingHandler(m->destination);
+			//debug
+			//printf("destination is : %08x\n", m->destination);
+			//printf("waitingThread is : %08x\n\n", waitingHandler);
+
 		} else {
 			queue->enqueue(m);
 		}
@@ -111,7 +133,8 @@ void SchedulerThread::start() {
 }
 
 
-MessageHandlerThread::MessageHandlerThread() : TThread(), state(READY) {
+MessageHandlerThread::MessageHandlerThread() :
+		TThread(), waitFor(NULL), state(READY) {
 }
 
 
@@ -135,11 +158,17 @@ void MessageHandlerThread::run() {
 
 Message *MessageHandlerThread::waitForMessage(Actor *waitFor) {
 	state = WAIT;
+	this->waitFor = waitFor;
 	running->state = Actor::SENDWAIT;
+
+	//debug
+	//printf("Actor: %08x\n", this->running);
+	//printf("thread %08x: waitFor %08x\n\n", this, waitFor);
 
 	scheduler.awake(&context);
 
 	state = RUNNING;
+	this->waitFor = NULL;
 	running->state = Actor::RUNNABLE;
 
 	return msg;

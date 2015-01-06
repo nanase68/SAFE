@@ -42,6 +42,7 @@ private:
 public:
 	Actor *running;
 	Message *msg;
+	Actor *waitFor;
 	MessageHandlerThread();
 	enum State {READY, RUNNING, WAIT} state;
 	Message *waitForMessage(Actor *waitFor);
@@ -53,6 +54,7 @@ private:
 	MessageHandlerThread *msgHandlerList;
 	void run();
 	MessageHandlerThread *findFreeHandler();
+	MessageHandlerThread *findWaitingHandler(Actor *actor);
 public:
 	MessageHandlerThread *runningHandler;
 	SchedulerThread();
