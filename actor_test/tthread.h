@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-typedef void *tt_stack_t;
+typedef void **tt_stack_t;
 
 typedef struct tt_context {
     void *r8;
