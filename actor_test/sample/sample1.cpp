@@ -216,31 +216,32 @@ bool Rn42SlaveActor::receiveMessage(Message *m) {
 	//printf("#");
 	return true;
 }
-short Rn42SlaveActor::RN42_reset(void)
-{
-    char buff[3];
-    short i=0;
+short Rn42SlaveActor::RN42_reset(void) {
+	char buff[3];
+	short i = 0;
 
-    RN42_reset_pin = 0;
-    wait_ms(500);
-    RN42_reset_pin = 1;
-    wait(2);
-    //lcd2.printf("checking reset");
-    RN42.printf("$$$");
-    for(i=0; i<3; i++) {
-        buff[i] = RN42.getc();
-    }
-   // pc2.printf("buffer = %s\n",buff);
-    if((buff[0] == 67) && (buff[1] == 77) && (buff[2] == 68)) { //CMD
-        RN42.printf("---\n");
-        while(RN42.getc() != 68);
-        while(RN42.getc() != 10);
-       // lcd2.printf("reset successful");
-        return 1;
-    }
+	RN42_reset_pin = 0;
+	wait_ms(500);
+	RN42_reset_pin = 1;
+	wait(2);
+	lcd2.printf("checking reset");
+	RN42.printf("$$$");
+	for (i = 0; i < 3; i++) {
+		buff[i] = RN42.getc();
+	}
+	pc2.printf("buffer = %s\n", buff);
+	if ((buff[0] == 67) && (buff[1] == 77) && (buff[2] == 68)) { //CMD
+		RN42.printf("---\n");
+		while (RN42.getc() != 68)
+			;
+		while (RN42.getc() != 10)
+			;
+		lcd2.printf("reset successful");
+		return 1;
+	}
 
-    //lcd2.printf("reset failed...");
-    return 0;
+	lcd2.printf("reset failed...");
+	return 0;
 }
 }	//namespace
 
