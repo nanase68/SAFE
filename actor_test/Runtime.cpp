@@ -121,6 +121,13 @@ void SchedulerThread::run() {
 			//printf("destination is : %08x\n", m->destination);
 			//printf("waitingThread is : %08x\n\n", waitingHandler);
 
+			if(waitingHandler->waitFor == m->sender) {
+				//debug
+				//puts("He is waiting for me!");
+				waitingHandler->awake(&context);
+			} else {
+				queue->enqueue(m);
+			}
 		} else {
 			queue->enqueue(m);
 		}
