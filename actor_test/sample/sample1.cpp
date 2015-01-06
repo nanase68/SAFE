@@ -5,8 +5,6 @@
  *      Author: Ys
  */
 
-#include <iostream>
-
 #include "Actor.h"
 #include "Message.h"
 #include "SystemActor.h"
@@ -56,8 +54,6 @@ public:
 };
 
 bool MyActor::receiveMessage(Message *m) {
-	//cout << "receiveMessage" << endl;
-
 	if ((led2 == 0) && (led3 == 0) && (led4 == 0)) {
 		led2 = 1;
 	} else {
@@ -66,10 +62,6 @@ bool MyActor::receiveMessage(Message *m) {
 		led3 = led2;
 		led2 = temp;
 	}
-
-	//同じメッセージ使い回し（手抜き）
-	//sendTo(this, m);
-
 	return false;
 }
 
@@ -82,12 +74,7 @@ public:
 };
 
 bool MyActor2::receiveMessage(Message *m) {
-	//cout << "receiveMessage2" << endl;
-
 	led1 = !led1;
-
-	//this->sendTo(this, m);
-
 	return false;
 }
 
@@ -226,6 +213,7 @@ bool Rn42SlaveActor::receiveMessage(Message *m) {
 		pc.putc(RN42.getc());
 	}
 
+	//printf("#");
 	return true;
 }
 short Rn42SlaveActor::RN42_reset(void)
@@ -275,7 +263,7 @@ void sample1() {
 	sysActor.setPeriodicTask(&a5, &m5, 0.1);
 	sysActor.setPeriodicTask(&a6, &m6, 0.1);
 
-	cout << "Start!!" << endl;
+	printf("Start!!");
 	Actor::start();
 	return;
 }
