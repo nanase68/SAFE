@@ -117,13 +117,8 @@ void SchedulerThread::run() {
 			MessageHandlerThread *waitingHandler;
 
 			waitingHandler = findWaitingHandler(m->destination);
-			//debug
-			//printf("destination is : %08x\n", m->destination);
-			//printf("waitingThread is : %08x\n\n", waitingHandler);
 
 			if(waitingHandler->waitFor == m->sender) {
-				//debug
-				//puts("He is waiting for me!");
 				waitingHandler->awake(&context);
 			} else {
 				queue->enqueue(m);
@@ -167,10 +162,6 @@ Message *MessageHandlerThread::waitForMessage(Actor *waitFor) {
 	state = WAIT;
 	this->waitFor = waitFor;
 	running->state = Actor::SENDWAIT;
-
-	//debug
-	//printf("Actor: %08x\n", this->running);
-	//printf("thread %08x: waitFor %08x\n\n", this, waitFor);
 
 	scheduler.awake(&context);
 
