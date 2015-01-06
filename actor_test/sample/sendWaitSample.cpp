@@ -117,7 +117,9 @@ void sendWaitSample() {
 	WorkerActor w0(0, led2, b);
 	WorkerActor w1(1, led3, b);
 	WorkerActor w2(2, led4, b);
-	Message m;
+	Message m, m2;
+	Actor a;
+	//a.sendTo(&b, &m2);
 
 	b.setWorkers(&w0, &w1, &w2);
 

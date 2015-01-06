@@ -31,7 +31,8 @@ bool Actor::sendTo(Actor *dest, Message* m){
 
 Message *Actor::sendWait(Actor *dest, Message* m){
 	this->sendTo(dest, m);
-	return NULL;
+	MessageHandlerThread *handler = scheduler.runningHandler;
+	return handler->waitForMessage(dest);
 }
 
 bool Actor::sendToPriorityQueue(Actor *dest, Message *m){

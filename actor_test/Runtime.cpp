@@ -29,7 +29,7 @@ TThread::TThread(bool isMainThread) : next(NULL) {
 		context = NULL;
 	} else {
 		printf("malloc in TThread... ");
-		stack = malloc(TT_STACK_SIZE);
+		stack = (tt_stack_t) malloc(TT_STACK_SIZE);
 		printf("OK!\n");
 		context = tt_new_context(stack + TT_STACK_DEPTH, &starter, this);
 	}
@@ -92,11 +92,13 @@ void SchedulerThread::run() {
 			}
 		}
 
-		if(m->sender->state == Actor::RUNNABLE) {
-			MessageHandlerThread *handler = findFreeHandler();
+		if(m->destination->state == Actor::RUNNABLE) {
+			runningHandler = findFreeHandler();
+			runningHandler->msg = m;
 
-			handler->msg = m;
-			handler->awake(&context);
+			runningHandler->awake(&context);
+
+			runningHandler = NULL;
 		} else {
 			queue->enqueue(m);
 		}
@@ -119,8 +121,8 @@ void MessageHandlerThread::run() {
 		assert(state == READY);
 		assert(msg->destination->state == Actor::RUNNABLE);
 
-		state = BUSY;
-		running = msg->sender;
+		state = RUNNING;
+		running = msg->destination;
 
 		msg->destination->receiveMessage(msg);
 
@@ -128,4 +130,17 @@ void MessageHandlerThread::run() {
 
 		scheduler.awake(&context);
 	}
+}
+
+
+Message *MessageHandlerThread::waitForMessage(Actor *waitFor) {
+	state = WAIT;
+	running->state = Actor::SENDWAIT;
+
+	scheduler.awake(&context);
+
+	state = RUNNING;
+	running->state = Actor::RUNNABLE;
+
+	return msg;
 }
