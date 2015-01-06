@@ -229,6 +229,7 @@ short Rn42SlaveActor::RN42_reset(void) {
 	for (i = 0; i < 3; i++) {
 		buff[i] = RN42.getc();
 	}
+	/*
 	pc.printf("buffer = %s\n", buff);
 	if ((buff[0] == 67) && (buff[1] == 77) && (buff[2] == 68)) { //CMD
 		RN42.printf("---\n");
@@ -240,7 +241,9 @@ short Rn42SlaveActor::RN42_reset(void) {
 		return 1;
 	}
 
-	pc.printf("reset failed...\n");
+	 */
+	RN42.printf("---\n");
+	//pc.printf("reset failed...\n");
 	return 0;
 }
 }	//namespace
