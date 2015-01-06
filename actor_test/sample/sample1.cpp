@@ -205,19 +205,6 @@ bool SpeakerActor::receiveMessage(Message *m) {
 /*
  *
  */
-class BluetoothSendActor: public Actor {
-public:
-	bool receiveMessage(Message* m);
-};
-bool BluetoothSendActor::receiveMessage(Message *m) {
-	if (joy != 0b0000) {
-		// joystickが何れかの方向に倒されていたら
-		RN42.baud(115200);
-		RN42.printf("Hello World\n");
-	}
-	return true;
-}
-
 class Rn42SlaveActor: public Actor {
 public:
 	Rn42SlaveActor();
@@ -277,7 +264,6 @@ void sample1() {
 	LcdPrintActor a3;
 	RgbBrightenActor a4;
 	SpeakerActor a5;
-	//BluetoothSendActor a6;
 	Rn42SlaveActor a6;
 	Message m, m2, m3, m4, m5, m6;
 	//a2.sendTo(&a2, &m2);
