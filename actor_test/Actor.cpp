@@ -28,6 +28,13 @@ bool Actor::sendTo(Actor *dest, Message* m){
 	this->sendToQueue(dest, m, &globalNormalQueue);
 	return true;
 }
+
+Message *Actor::sendWait(Actor *dest, Message* m){
+	this->sendTo(dest, m);
+	MessageHandlerThread *handler = scheduler.runningHandler;
+	return handler->waitForMessage(dest);
+}
+
 bool Actor::sendToPriorityQueue(Actor *dest, Message *m){
 	this->sendToQueue(dest, m, &globalPriorityQueue);
 	return true;
@@ -40,7 +47,7 @@ bool Actor::start(){
 	return true;
 }
 
-Actor::Actor() {
+Actor::Actor() : state(RUNNABLE) {
 	// TODO Auto-generated constructor stub
 
 }
