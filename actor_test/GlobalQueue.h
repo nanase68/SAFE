@@ -18,6 +18,7 @@ private:
 
 public:
 	GlobalQueue(size_t maxSize = GLOBAL_QUEUE_SIZE);
+	virtual ~GlobalQueue();
 	Message* dequeue();
 	void enqueue(Message*);
 	int size() { return size_; };

@@ -17,6 +17,10 @@ GlobalQueue::GlobalQueue(size_t maxSize) :
 
 }
 
+GlobalQueue::~GlobalQueue() {
+	free(bufHead);
+}
+
 Message* GlobalQueue::dequeue() {
 	Message *ret;
 
