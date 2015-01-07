@@ -14,12 +14,13 @@ private:
 	Message **bufTail;
 	Message **head;
 	Message **tail;
+	int size_;
 
 public:
 	GlobalQueue(size_t maxSize = GLOBAL_QUEUE_SIZE);
 	Message* dequeue();
 	void enqueue(Message*);
-	int size();
+	int size() { return size_; };
 };
 
 extern GlobalQueue globalPriorityQueue;
