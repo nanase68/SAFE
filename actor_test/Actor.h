@@ -22,10 +22,7 @@ public:
 	Message *sendWait(Actor *dest, Message *m);
 	bool sendToPriorityQueue(Actor *dest, Message *m);
 	virtual bool receiveMessage(Message*);
-	bool spawnActor();
-	bool changeState();
 
-	void checkQueue();
 	static bool start();
 
 	Actor();
