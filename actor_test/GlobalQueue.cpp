@@ -7,13 +7,18 @@
 GlobalQueue globalPriorityQueue;
 GlobalQueue globalNormalQueue;
 
-GlobalQueue::GlobalQueue(size_t size) :
-		size(size),
-		bufHead((Message **)malloc(sizeof(Message*) * size)),
-		bufTail(bufHead + size),
-		head(NULL),
-		tail(NULL) {
+GlobalQueue::GlobalQueue(size_t maxSize) :
+		maxSize(maxSize),
+		bufHead((Message **)malloc(sizeof(Message*) * maxSize)),
+		bufTail(bufHead + maxSize),
+		head(bufHead),
+		tail(bufHead),
+		size_(0) {
 
+}
+
+GlobalQueue::~GlobalQueue() {
+	free(bufHead);
 }
 
 Message* GlobalQueue::dequeue() {
@@ -21,19 +26,12 @@ Message* GlobalQueue::dequeue() {
 
 	__disable_irq();
 
-	if (head == NULL) {
-		assert(tail == NULL);
+	if (size_ == 0) {
 		ret = NULL;
 	} else {
-		assert(tail != NULL);
 		ret = *head;
-		if(head == tail) {
-			head = tail = NULL;
-		} else {
-			++head;
-			if(head == bufTail) { head = bufHead; }
-		}
-
+		if(++head == bufTail) { head = bufHead; }
+		--size_;
 	}
 
 	__enable_irq();
@@ -45,22 +43,15 @@ void GlobalQueue::enqueue(Message* m) {
 
 	__disable_irq();
 
-	if(head == NULL) {
-		assert(tail == NULL);
-		head = tail = bufHead;
+	if(size_ == maxSize) {
+		// buffer overflow
+		printf("FATAL: Message Queue Overflow\n");
+		exit(1);
 	} else {
-		assert(tail != NULL);
-		++tail;
-		if(tail == bufTail) { tail = bufHead; };
-		if(tail == head) {
-			// buffer overflow
-			printf("FATAL: Message Queue Overflow\n");
-			exit(1);
-		}
-
+		*tail = m;
+		if(++tail == bufTail) { tail = bufHead; }
+		++size_;
 	}
-
-	*tail = m;
 
 	__enable_irq();
 

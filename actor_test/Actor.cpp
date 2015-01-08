@@ -6,6 +6,7 @@
  */
 #include "mbed.h"
 #include "Actor.h"
+#include "SystemActor.h"
 #include "Message.h"
 #include "GlobalQueue.h"
 #include "Runtime.h"
@@ -56,3 +57,12 @@ Actor::~Actor() {
 	// TODO Auto-generated destructor stub
 }
 
+
+Actor &Actor::operator<<(Message &m) {
+	MessageHandlerThread *th = scheduler.runningHandler;
+	Actor *sender = (th) ? th->running : &sysActor;
+
+	sender->sendTo(this, &m);
+
+	return *this;
+}

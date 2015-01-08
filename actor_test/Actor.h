@@ -30,6 +30,9 @@ public:
 
 	Actor();
 	virtual ~Actor();
+
+	Actor &operator<<(Message &m);
 };
+
 
 #endif /* ACTOR_H_ */
