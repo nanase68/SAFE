@@ -11,9 +11,12 @@
 
 #include "Actor.h"
 
+class SACB;
+
 class StateActor : public Actor {
 public:
 	int gState; /* global state */
+	SACB *sacb; /* StateActor Control Block */
 
 	StateActor();
 	virtual ~StateActor();
