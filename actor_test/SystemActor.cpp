@@ -9,6 +9,7 @@
 #include "SystemActor.h"
 #include "Message.h"
 #include "TickerComposite.h"
+#include "StateMessage.h"
 
 SystemActor sysActor;
 
@@ -32,6 +33,13 @@ SystemActor::SystemActor() {
 
 SystemActor::~SystemActor() {
 	// TODO Auto-generated destructor stub
+}
+
+SystemActor &SystemActor::operator <<(StateTransReqMsg *msg) {
+	//debug
+	printf("stateTransReq: %d\n", msg->getLabel());
+
+	return *this;
 }
 
 SystemActor::TCList *SystemActor::tcList = 0;

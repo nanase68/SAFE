@@ -13,7 +13,7 @@
 class StateTransReqMsg : public Message {
 public:
 	StateTransReqMsg(int state) : Message(state) {};
-	virtual ~StateTransReqMsg();
+	virtual ~StateTransReqMsg() {};
 };
 
 StateTransReqMsg *stateTransReq(int state);

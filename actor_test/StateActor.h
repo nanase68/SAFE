@@ -10,6 +10,8 @@
 
 
 #include "Actor.h"
+#include "StateControl.h"
+#include "StateMessage.h"
 
 class SACB;
 
