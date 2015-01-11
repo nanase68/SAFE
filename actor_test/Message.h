@@ -12,12 +12,21 @@
 class Actor;
 #include <string>
 
-
 class Message {
+private:
+	int label;
+	void* content;
 public:
 	Actor *sender, *destination;
 
+	void set_label(int i){label = i;}
+	int get_label(){return label;}
+	void set_content(void* v){content = v;}
+	void* get_content(){return content;}
+
 	Message();
+	Message(int label);
+	Message(int label, void* content);
 	Message(Actor*, Actor*);
 	virtual ~Message();
 };
@@ -33,6 +42,19 @@ public:
 	MessageInt(Actor*, Actor*, int);
 	MessageInt();
 	virtual ~MessageInt();
+};
+
+class MessageDouble: public Message {
+protected:
+	double content;
+public:
+	void set_content(double);
+	Message& operator=(double);
+	double get_content(void);
+
+	MessageDouble(Actor*, Actor*, double);
+	MessageDouble();
+	virtual ~MessageDouble();
 };
 
 class MessageStr: public Message {
