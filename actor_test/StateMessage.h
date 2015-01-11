@@ -10,13 +10,13 @@
 
 #include "Message.h"
 
-class StateChangeReqMsg : public Message {
+class StateTransReqMsg : public Message {
 public:
-	StateChangeReqMsg(int state) : Message(state) {};
-	virtual ~StateChangeReqMsg();
+	StateTransReqMsg(int state) : Message(state) {};
+	virtual ~StateTransReqMsg();
 };
 
-StateChangeReqMsg *stateChangeReq(int state);
+StateTransReqMsg *stateTransReq(int state);
 
 
 #endif /* STATEMESSAGE_H_ */

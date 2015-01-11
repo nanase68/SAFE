@@ -8,6 +8,6 @@
 #include "StateMessage.h"
 
 
-StateChangeReqMsg *stateChangeReq(int state) {
-	return new StateChangeReqMsg(state);
+StateTransReqMsg *stateTransReq(int state) {
+	return new StateTransReqMsg(state);
 }
