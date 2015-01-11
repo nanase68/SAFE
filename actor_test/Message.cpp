@@ -10,7 +10,13 @@
 Message::Message(){
 
 }
-
+Message::Message(int label){
+	set_label(label);
+}
+Message::Message(int label, void* content){
+	set_label(label);
+	set_content(content);
+}
 Message::Message(Actor* sender, Actor* destination) {
 	Message::sender = sender;
 	Message::destination = destination;
@@ -22,7 +28,7 @@ Message::~Message() {
 
 
 /*
- * MessageInt.cpp
+ * MessageInt
  *
  *  Created on: 2014/12/02
  *      Author: Ys
@@ -52,7 +58,30 @@ MessageInt::~MessageInt() {
 }
 
 /*
- * MessageStr.cpp
+ * MessageDouble
+ */
+void MessageDouble::set_content(double d){
+	MessageDouble::content = d;
+}
+Message& MessageDouble::operator =(double d){
+	MessageDouble::set_content(d);
+	return *this;
+}
+double MessageDouble::get_content(){
+	return content;
+}
+MessageDouble::MessageDouble(Actor* sender, Actor* destination, double d)
+: Message::Message(sender, destination){
+	MessageDouble::set_content(d);
+}
+MessageDouble::MessageDouble(){
+}
+MessageDouble::~MessageDouble(){
+}
+
+
+/*
+ * MessageStr
  *
  *  Created on: 2014/12/02
  *      Author: Ys
