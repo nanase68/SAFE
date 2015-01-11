@@ -17,7 +17,10 @@ SystemActor sysActor;
  */
 bool SystemActor::setPeriodicTask(Actor *dest, Message *msg, float periodicTime){
 	TickerComposite *tc = new TickerComposite(dest, msg, periodicTime);
-	SystemActor::tcVector.push_back(tc);
+	TCList *tcl = new TCList;
+	tcl->tc = tc;
+	tcl->next = tcList;
+	tcList = tcl;
 
 	return true;
 }
@@ -31,4 +34,4 @@ SystemActor::~SystemActor() {
 	// TODO Auto-generated destructor stub
 }
 
-std::vector<TickerComposite*> SystemActor::tcVector;
+SystemActor::TCList *SystemActor::tcList = 0;
