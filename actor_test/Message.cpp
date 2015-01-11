@@ -10,13 +10,6 @@
 Message::Message(){
 
 }
-Message::Message(int label){
-	set_label(label);
-}
-Message::Message(int label, void* content){
-	set_label(label);
-	set_content(content);
-}
 Message::Message(Actor* sender, Actor* destination) {
 	Message::sender = sender;
 	Message::destination = destination;

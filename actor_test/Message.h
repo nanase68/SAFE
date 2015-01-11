@@ -19,14 +19,14 @@ private:
 public:
 	Actor *sender, *destination;
 
-	void set_label(int i){label = i;}
-	int get_label(){return label;}
-	void set_content(void* v){content = v;}
-	void* get_content(){return content;}
+	void setLabel(int i){label = i;}
+	int getLabel(){return label;}
+	void setContent(void* v){content = v;}
+	void* getContent(){return content;}
 
 	Message();
-	Message(int label);
-	Message(int label, void* content);
+	Message(int label): label(label){};
+	Message(int label, void* content): label(label), content(content){};
 	Message(Actor*, Actor*);
 	virtual ~Message();
 };
