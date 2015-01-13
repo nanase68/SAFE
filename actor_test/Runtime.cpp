@@ -119,7 +119,11 @@ void SchedulerThread::run() {
 			waitingHandler = findWaitingHandler(m->destination);
 
 			if(waitingHandler->waitFor == m->sender) {
+				runningHandler = waitingHandler;
+
 				waitingHandler->awake(&context);
+
+				runningHandler = 0;
 			} else {
 				queue->enqueue(m);
 			}
