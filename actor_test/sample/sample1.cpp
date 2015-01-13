@@ -200,7 +200,6 @@ public:
 };
 Rn42SlaveActor::Rn42SlaveActor() {
 	RN42.baud(115200);
-	pc.baud(115200);
 }
 bool Rn42SlaveActor::receiveMessage(Message *m) {
 	if (joy != 0b0000) {
