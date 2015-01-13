@@ -10,15 +10,25 @@
 
 namespace mbed{
 	class Ticker;
+	class Timeout;
 }
 class Actor;
 class Message;
 
-class TickerComposite{
+class FlipperComposite{
 public:
-	mbed::Ticker *ticker;
 	Actor *destination;
 	Message *message;
+
+	virtual void autoSend();
+
+	FlipperComposite(Actor *dest, Message *msg): message(msg), destination(dest){};
+	FlipperComposite(){};
+};
+
+class TickerComposite: FlipperComposite{
+public:
+	mbed::Ticker *ticker;
 
 	void autoSend();
 
@@ -26,4 +36,13 @@ public:
 	~TickerComposite();
 };
 
+class TimeoutComposite: FlipperComposite{
+public:
+	mbed::Timeout *timeout;
+
+	void autoSend();
+
+	TimeoutComposite(Actor *dest, Message *msg, float waitTime);
+	~TimeoutComposite();
+};
 #endif /* TICKERCOMPOSIT_H_ */
