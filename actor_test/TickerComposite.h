@@ -22,8 +22,7 @@ public:
 
 	virtual void autoSend();
 
-	FlipperComposite(Actor *dest, Message *msg): message(msg), destination(dest){};
-	FlipperComposite(){};
+	FlipperComposite(Actor *dest, Message *msg): destination(dest), message(msg){};
 };
 
 class TickerComposite: FlipperComposite{
