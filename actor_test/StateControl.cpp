@@ -8,8 +8,10 @@
 
 #include "StateControl.h"
 
+#include <stdio.h>
 #include <assert.h>
 
+#include "Runtime.h"
 #include "StateActor.h"
 
 
@@ -64,3 +66,38 @@ void StateControl::removeStateActor(StateActor *sActor) {
 		assert(0);
 	}
 }
+
+void StateControl::stateTransReq(int state) {
+	if(reqFlag == true) {
+		// A request already exists
+		return;
+	} else if(currentState == state) {
+		// Same state
+		return;
+	} else {
+		reqFlag = true;
+		request = state;
+		return;
+	}
+}
+
+void StateControl::stateTransition() {
+	//assert(reqFlag == true);
+
+	int prevState = currentState;
+	int newState = request;
+
+	scheduler.stateTransFlag = false;
+
+	//debug
+	puts("StateControl : StateTransition");
+
+	SACB *sacb = list;
+	while(sacb != 0) {
+		sacb->sActor->gState = newState;
+		sacb->sActor->stateTrans(prevState, newState);
+
+		sacb = sacb->next;
+	}
+}
+

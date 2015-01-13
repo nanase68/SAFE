@@ -23,13 +23,18 @@ public:
 class StateControl {
 private:
 	SACB *list;
+	int currentState;
+	bool reqFlag;
+	int request;
 public:
-	StateControl() : list(0) {};
+	StateControl() : list(0),currentState(0), reqFlag(false), request(0) {};
 	virtual ~StateControl();
 
 	SACB *getList() { return list; };
 	SACB *registerStateActor(StateActor *sActor);
 	void removeStateActor(StateActor *sActor);
+	void stateTransReq(int state);
+	void stateTransition();
 };
 
 extern StateControl stateControl;

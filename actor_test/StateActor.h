@@ -23,7 +23,7 @@ public:
 	StateActor();
 	virtual ~StateActor();
 
-	virtual void stateTrans(int prev, int next);
+	virtual void stateTrans(int prev, int next) { return; };
 	bool sendToQueue(Actor *dest, Message *m, GlobalQueue *gqueue);
 };
 
