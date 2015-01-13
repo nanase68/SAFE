@@ -10,6 +10,7 @@ Actor actor;
 
 void sample1();
 void sendWaitSample();
+void stateTransTest();
 
 int main() {
 	//MessageInt message(&actor, &actor, 0);
@@ -17,7 +18,8 @@ int main() {
 
 	//actor.start();
 	//sample1();
-	sendWaitSample();
+	//sendWaitSample();
+	stateTransTest();
 	return 0;
 
 }

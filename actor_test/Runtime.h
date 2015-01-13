@@ -51,10 +51,12 @@ public:
 
 class SchedulerThread : public TThread {
 private:
+	volatile bool stateTransFlag;
 	MessageHandlerThread *msgHandlerList;
 	void run();
 	MessageHandlerThread *findFreeHandler();
 	MessageHandlerThread *findWaitingHandler(Actor *actor);
+	friend class StateControl;
 public:
 	MessageHandlerThread *runningHandler;
 	SchedulerThread();

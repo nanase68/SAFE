@@ -14,6 +14,7 @@
 #include "Actor.h"
 #include "Message.h"
 #include "tthread.h"
+#include "StateControl.h"
 
 Runtime runtime;
 SchedulerThread scheduler;
@@ -54,6 +55,7 @@ void TThread::awake(tt_context_t *oldContext) {
 
 SchedulerThread::SchedulerThread() :
 		TThread(true),
+		stateTransFlag(false),
 		msgHandlerList(new MessageHandlerThread) {
 }
 
@@ -101,6 +103,8 @@ void SchedulerThread::run() {
 				queue = &globalPriorityQueue;
 			} else if((m = globalNormalQueue.dequeue())) {
 				queue = &globalNormalQueue;
+			} else if(stateTransFlag == true) {
+				stateControl.stateTransition();
 			} else {
 				wait(0.001);
 			}

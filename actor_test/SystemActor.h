@@ -10,6 +10,7 @@
 
 #include "Actor.h"
 class TickerComposite;
+class StateTransReqMsg;
 
 class SystemActor: public Actor {
 private:
@@ -26,6 +27,8 @@ public:
 
 	SystemActor();
 	virtual ~SystemActor();
+
+	SystemActor &operator<<(StateTransReqMsg *msg);
 };
 
 extern SystemActor sysActor;
