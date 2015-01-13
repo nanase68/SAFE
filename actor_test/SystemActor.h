@@ -9,12 +9,15 @@
 #define SYSTEMACTOR_H_
 
 #include "Actor.h"
-#include <vector>
 class TickerComposite;
 
 class SystemActor: public Actor {
 private:
-	static std::vector<TickerComposite*> tcVector;
+	struct TCList {
+		TickerComposite *tc;
+		TCList *next;
+	};
+	static TCList *tcList;
 
 public:
 	bool setPeriodicTask(Actor *dest, Message *msg, float periodicTime);
