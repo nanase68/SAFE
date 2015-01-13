@@ -9,7 +9,7 @@
 
 #include "StateControl.h"
 
-StateActor::StateActor() {
+StateActor::StateActor() : gState(stateControl.getCurrentState()) {
 	sacb = stateControl.registerStateActor(this);
 }
 

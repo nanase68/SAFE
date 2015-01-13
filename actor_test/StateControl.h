@@ -31,6 +31,7 @@ public:
 	virtual ~StateControl();
 
 	SACB *getList() { return list; };
+	int getCurrentState() { return currentState; };
 	SACB *registerStateActor(StateActor *sActor);
 	void removeStateActor(StateActor *sActor);
 	void stateTransReq(int state);
