@@ -51,7 +51,7 @@ public:
 
 class SchedulerThread : public TThread {
 private:
-	bool stateTransFlag;
+	volatile bool stateTransFlag;
 	MessageHandlerThread *msgHandlerList;
 	void run();
 	MessageHandlerThread *findFreeHandler();

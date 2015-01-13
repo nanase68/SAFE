@@ -10,6 +10,7 @@
 #include "Message.h"
 #include "TickerComposite.h"
 #include "StateMessage.h"
+#include "StateControl.h"
 
 SystemActor sysActor;
 
@@ -38,6 +39,8 @@ SystemActor::~SystemActor() {
 SystemActor &SystemActor::operator <<(StateTransReqMsg *msg) {
 	//debug
 	printf("stateTransReq: %d\n", msg->getLabel());
+
+	stateControl.stateTransReq(msg->getLabel());
 
 	return *this;
 }

@@ -55,7 +55,7 @@ void TThread::awake(tt_context_t *oldContext) {
 
 SchedulerThread::SchedulerThread() :
 		TThread(true),
-		stateTransFlag(true),
+		stateTransFlag(false),
 		msgHandlerList(new MessageHandlerThread) {
 }
 

@@ -77,12 +77,14 @@ void StateControl::stateTransReq(int state) {
 	} else {
 		reqFlag = true;
 		request = state;
+
+		scheduler.stateTransFlag = true;
 		return;
 	}
 }
 
 void StateControl::stateTransition() {
-	//assert(reqFlag == true);
+	assert(reqFlag == true);
 
 	int prevState = currentState;
 	int newState = request;
@@ -99,5 +101,8 @@ void StateControl::stateTransition() {
 
 		sacb = sacb->next;
 	}
+
+	currentState = newState;
+	reqFlag = false;
 }
 
