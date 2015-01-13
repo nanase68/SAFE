@@ -16,8 +16,8 @@ int main() {
 	//gqueue.enqueue(&message);
 
 	//actor.start();
-	//sample1();
-	sendWaitSample();
+	sample1();
+	//sendWaitSample();
 	return 0;
 
 }
