@@ -107,9 +107,9 @@ public:
 	enum Mode {
 		TAM_CHECK, TAM_MODE,
 	};
-	enum Display{
+	enum DisplayMode {
 		TEMP_C, TEMP_F,
-	} display;
+	} displayMode;
 	bool receiveMessage(Message *m);
 	TemperatureActor();
 };
@@ -117,43 +117,75 @@ TemperatureActor::TemperatureActor() {
 	printf("TemperatureActor start!!\n");
 }
 bool TemperatureActor::receiveMessage(Message *m) {
-	if (m->getLabel() == TAM_CHECK) {
-		//Try to open the LM75B
-		if (sensor.open()) {
-			//Print the current temperature
-			//printf("Temp = %.3f\n", (float) sensor);
+	if (m->getLabel() == TAM_MODE) {
+		displayMode = (DisplayMode) (int) (m->getContent());
+		delete m;
+	}
 
-			char* s;
-			s = new char[CHAR_SIZE];
-			if (pastTemp == (float) sensor) {
-				return true;
-			}
-			sprintf(s, "Temp = %.3f\n", (float) sensor);
-			Message* msgs = new Message(0, s);
-			sendTo(&lcdPrintActor, msgs);
-			pastTemp = (float) sensor;
-			return true;
-		} else {
-			error("Device not detected!\n");
+	//Try to open the LM75B
+	if (sensor.open()) {
+		//Print the current temperature
+		//printf("Temp = %.3f\n", (float) sensor);
+
+		char* s;
+		s = new char[CHAR_SIZE];
+		// 前回と同じ値なら更新しない
+		if (pastTemp == (float) sensor) {
 			return false;
 		}
-	}else if(m->getLabel() == TAM_MODE){
-
+		if (displayMode == TEMP_C) {
+			sprintf(s, "Temp = %.3f C\n", (float) sensor);
+		} else {
+			sprintf(s, "Temp = %.3f F\n", ((float) sensor) * 1.8 + 32);
+		}
+		Message* msgs = new Message(0, s);
+		sendTo(&lcdPrintActor, msgs);
+		pastTemp = (float) sensor;
 	} else {
-		return false;
+		error("Device not detected!\n");
 	}
+	return false;
 }
 TemperatureActor temperatureActor;
+
+class JoysticInputActor: public Actor {
+private:
+	int lastFire;
+	int lastJoy;
+public:
+	bool receiveMessage(Message *m);
+};
+bool JoysticInputActor::receiveMessage(Message *m) {
+	if (fire && (!lastFire)) {
+		Message* msg = new Message(TemperatureActor::TAM_MODE,
+				(void*) TemperatureActor::TEMP_F);
+		sendTo(&temperatureActor, msg);
+		lastFire = fire;
+	} else if ((joy != 0b0000) && (lastJoy == 0b0000)) {
+		Message* msg = new Message(TemperatureActor::TAM_MODE,
+				(void*) TemperatureActor::TEMP_C);
+		sendTo(&temperatureActor, msg);
+		lastJoy = joy;
+	} else if (lastFire) {
+		lastFire = 0;
+	} else if (lastJoy != 0b0000) {
+		lastJoy = 0b0000;
+	}
+	return false;
+}
+JoysticInputActor joyStickInputActor;
 }	//namespace
 
 /*
  * Main
  */
 void sample2() {
+	Message m; // 中身の無いメッセージ
 	void* v = 0;
 	Message msgTemp(TemperatureActor::TAM_CHECK, v);
 
 	sysActor.setPeriodicTask(&temperatureActor, &msgTemp, 1.0);
+	sysActor.setPeriodicTask(&joyStickInputActor, &m, 0.1);
 
 	Actor::start();
 	return;
