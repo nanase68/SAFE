@@ -78,19 +78,19 @@ LcdPrintActor::LcdPrintActor() :
 	lcd.set_auto_up(0);
 }
 bool LcdPrintActor::receiveMessage(Message *m) {
-	char* s = (char*)m->getContent();
+	char* s = (char*) m->getContent();
 	lcd.locate(0, label2locate(m->getLabel()));
 	lcd.printf("%s ", s);
 
 	lcd.copy_to_lcd();
-	delete (char*)m->getContent();
+	delete (char*) m->getContent();
 	delete m;
 	return false;
 }
-int LcdPrintActor::label2locate(int i){
-	if(i == 0){
+int LcdPrintActor::label2locate(int i) {
+	if (i == 0) {
 		return 0;
-	}else{
+	} else {
 		puts("invalid labed : LcdPrintActor");
 		return 0;
 	}
@@ -104,30 +104,37 @@ class TemperatureActor: public Actor {
 private:
 	float pastTemp;
 public:
+	enum Mode {
+		TAM_CHECK = 0, TAM_MODE = 1,
+	};
 	bool receiveMessage(Message *m);
 	TemperatureActor();
 };
-TemperatureActor::TemperatureActor(){
+TemperatureActor::TemperatureActor() {
 	printf("TemperatureActor start!!\n");
 }
 bool TemperatureActor::receiveMessage(Message *m) {
-	//Try to open the LM75B
-	if (sensor.open()) {
-		//Print the current temperature
-		//printf("Temp = %.3f\n", (float) sensor);
+	if (m->getLabel() == TAM_CHECK) {
+		//Try to open the LM75B
+		if (sensor.open()) {
+			//Print the current temperature
+			//printf("Temp = %.3f\n", (float) sensor);
 
-		char* s;
-		s = new char[CHAR_SIZE];
-		if(pastTemp == (float) sensor){
+			char* s;
+			s = new char[CHAR_SIZE];
+			if (pastTemp == (float) sensor) {
+				return true;
+			}
+			sprintf(s, "Temp = %.3f\n", (float) sensor);
+			Message* msgs = new Message(0, s);
+			sendTo(&lcdPrintActor, msgs);
+			pastTemp = (float) sensor;
 			return true;
+		} else {
+			error("Device not detected!\n");
+			return false;
 		}
-		sprintf(s, "Temp = %.3f\n", (float) sensor);
-		Message* msgs = new Message(0, s);
-		sendTo(&lcdPrintActor, msgs);
-		pastTemp = (float) sensor;
-		return true;
 	} else {
-		error("Device not detected!\n");
 		return false;
 	}
 }
@@ -138,10 +145,10 @@ TemperatureActor temperatureActor;
  * Main
  */
 void sample2() {
-	MyActor a;
-	Message m, m2;
+	void* v = 0;
+	Message msgTemp(TemperatureActor::TAM_CHECK, v);
 
-	sysActor.setPeriodicTask(&temperatureActor, &m2, 1.0);
+	sysActor.setPeriodicTask(&temperatureActor, &msgTemp, 1.0);
 
 	Actor::start();
 	return;
