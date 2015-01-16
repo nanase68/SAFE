@@ -90,6 +90,8 @@ LcdPrintActor lcdPrintActor;
  *
  */
 class TemperatureActor: public Actor {
+private:
+	float pastTemp;
 public:
 	bool receiveMessage(Message *m);
 	TemperatureActor();
@@ -105,9 +107,13 @@ bool TemperatureActor::receiveMessage(Message *m) {
 
 		char* s;
 		s = new char[CHAR_SIZE];
+		if(pastTemp == (float) sensor){
+			return true;
+		}
 		sprintf(s, "Temp = %.3f\n", (float) sensor);
 		MessageStr* msgs = new MessageStr(this, &lcdPrintActor, s);
 		sendTo(&lcdPrintActor, msgs);
+		pastTemp = (float) sensor;
 		return true;
 	} else {
 		error("Device not detected!\n");
