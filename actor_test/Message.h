@@ -31,44 +31,4 @@ public:
 	virtual ~Message();
 };
 
-class MessageInt: public Message {
-protected:
-	int content;
-public:
-	void set_content(int);
-	Message& operator=(int);
-	int get_content(void);
-
-	MessageInt(Actor*, Actor*, int);
-	MessageInt();
-	virtual ~MessageInt();
-};
-
-class MessageDouble: public Message {
-protected:
-	double content;
-public:
-	void set_content(double);
-	Message& operator=(double);
-	double get_content(void);
-
-	MessageDouble(Actor*, Actor*, double);
-	MessageDouble();
-	virtual ~MessageDouble();
-};
-
-class MessageStr: public Message {
-protected:
-	char* content;
-
-public:
-	void set_content(char*);
-	Message& operator=(char*);
-	char* get_content(void);
-
-	MessageStr(Actor*, Actor*, char*);
-
-	MessageStr();
-	virtual ~MessageStr();
-};
 #endif /* MESSAGE_H_ */

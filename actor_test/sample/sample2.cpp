@@ -67,6 +67,7 @@ bool MyActor::receiveMessage(Message *m) {
 class LcdPrintActor: public Actor {
 public:
 	bool receiveMessage(Message*);
+	int label2locate(int i);
 
 	LcdPrintActor();
 };
@@ -75,14 +76,22 @@ LcdPrintActor::LcdPrintActor() :
 	lcd.set_auto_up(0);
 }
 bool LcdPrintActor::receiveMessage(Message *m) {
-	char* s = ((MessageStr*)m)->get_content();
-	lcd.locate(0, 0);
+	char* s = (char*)m->getContent();
+	lcd.locate(0, label2locate(m->getLabel()));
 	lcd.printf("%s ", s);
 
 	lcd.copy_to_lcd();
-	delete ((MessageStr*) m)->get_content();
+	delete (char*)m->getContent();
 	delete m;
 	return false;
+}
+int LcdPrintActor::label2locate(int i){
+	if(i == 0){
+		return 0;
+	}else{
+		puts("invalid labed : LcdPrintActor");
+		return 0;
+	}
 }
 LcdPrintActor lcdPrintActor;
 
@@ -111,7 +120,7 @@ bool TemperatureActor::receiveMessage(Message *m) {
 			return true;
 		}
 		sprintf(s, "Temp = %.3f\n", (float) sensor);
-		MessageStr* msgs = new MessageStr(this, &lcdPrintActor, s);
+		Message* msgs = new Message(0, s);
 		sendTo(&lcdPrintActor, msgs);
 		pastTemp = (float) sensor;
 		return true;

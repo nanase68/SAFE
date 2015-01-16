@@ -29,8 +29,8 @@ void SystemActor::timeoutCallback(Actor* dest, Message* m){
 }
 bool SystemActor::receiveMessage(Message* m){
 	//puts("system actor receive message");
-	double waitTime = ((MessageDouble*)m)->get_content();
-	TimeoutComposite *tc = new TimeoutComposite(m->sender, m, (float)waitTime);
+	float* waitTime = (float*)m->getContent();
+	TimeoutComposite *tc = new TimeoutComposite(m->sender, m, *waitTime);
 	tocList->add(tc);
 
 	return true;
