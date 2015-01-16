@@ -13,7 +13,9 @@
 #include "C12832.h"
 #include "LM75B/LM75B.h"
 
-#define CHAR_SIZE 64
+#define CHAR_SIZE 16
+// MEMO: ここの値が大きすぎるとLcdPrintActor::receiveMessageが呼ばれないバグ
+//　　　　　現在の時点でも長く起動すると↑のバグが発生
 namespace {
 
 // LED
