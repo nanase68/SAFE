@@ -80,17 +80,17 @@ MessageDouble::~MessageDouble(){
  *      Author: Ys
  */
 
-void MessageStr::set_content(std::string str){
+void MessageStr::set_content(char* str){
 	MessageStr::content = str;
 }
-Message& MessageStr::operator =(std::string str){
+Message& MessageStr::operator =(char* str){
 	MessageStr::set_content(str);
 	return *this;
 }
 std::string MessageStr::get_content(){
 	return content;
 }
-MessageStr::MessageStr(Actor* sender, Actor* destination, std::string str)
+MessageStr::MessageStr(Actor* sender, Actor* destination, char* str)
 : Message::Message(sender, destination){
 	MessageStr::set_content(str);
 }

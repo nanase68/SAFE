@@ -59,14 +59,14 @@ public:
 
 class MessageStr: public Message {
 protected:
-	std::string content;
+	char* content;
 
 public:
-	void set_content(std::string);
-	Message& operator=(std::string);
-	std::string get_content(void);
+	void set_content(char*);
+	Message& operator=(char*);
+	char* get_content(void);
 
-	MessageStr(Actor*, Actor*, std::string);
+	MessageStr(Actor*, Actor*, char*);
 
 	MessageStr();
 	virtual ~MessageStr();
