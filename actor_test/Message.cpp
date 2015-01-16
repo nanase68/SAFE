@@ -87,7 +87,7 @@ Message& MessageStr::operator =(char* str){
 	MessageStr::set_content(str);
 	return *this;
 }
-std::string MessageStr::get_content(){
+char* MessageStr::get_content(){
 	return content;
 }
 MessageStr::MessageStr(Actor* sender, Actor* destination, char* str)
