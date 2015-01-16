@@ -101,7 +101,7 @@ bool TemperatureActor::receiveMessage(Message *m) {
 	//Try to open the LM75B
 	if (sensor.open()) {
 		//Print the current temperature
-		printf("Temp = %.3f\n", (float) sensor);
+		//printf("Temp = %.3f\n", (float) sensor);
 
 		char* s;
 		s = new char[CHAR_SIZE];
