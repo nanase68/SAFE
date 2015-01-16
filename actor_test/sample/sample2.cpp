@@ -43,25 +43,9 @@ DigitalIn fire(p14);
 // speaker
 PwmOut spkr(p26);
 
-// Rn42
-Serial RN42(p9, p10);
-Serial pc(USBTX, USBRX);
-DigitalOut RN42_reset_pin(p30);
-
 // LM75B
 //Create an LM75B object at the default address (ADDRESS_0)
 LM75B sensor(p28, p27);
-
-/*
- *
- */
-class MyActor: public Actor {
-public:
-	bool receiveMessage(Message *m);
-};
-bool MyActor::receiveMessage(Message *m) {
-	return false;
-}
 
 /*
  *
