@@ -156,9 +156,9 @@ bool JoysticInputActor::receiveMessage(Message *m) {
 				(void*) TemperatureActor::TEMP_C);
 		sendTo(&temperatureActor, msg);
 		lastJoy = joy;
-	} else if (lastFire) {
+	} else if ((!fire) && lastFire) {
 		lastFire = 0;
-	} else if (lastJoy != 0b0000) {
+	} else if ((joy == 0b0000) && lastJoy != 0b0000) {
 		lastJoy = 0b0000;
 	}
 	return false;
