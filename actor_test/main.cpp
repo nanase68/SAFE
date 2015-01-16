@@ -9,6 +9,7 @@ DigitalOut led1(LED1);
 Actor actor;
 
 void sample1();
+void sample2();
 void sendWaitSample();
 
 int main() {
@@ -16,7 +17,7 @@ int main() {
 	//gqueue.enqueue(&message);
 
 	//actor.start();
-	sample1();
+	sample2();
 	//sendWaitSample();
 	return 0;
 
