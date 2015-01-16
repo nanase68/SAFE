@@ -105,8 +105,11 @@ private:
 	float pastTemp;
 public:
 	enum Mode {
-		TAM_CHECK = 0, TAM_MODE = 1,
+		TAM_CHECK, TAM_MODE,
 	};
+	enum Display{
+		TEMP_C, TEMP_F,
+	} display;
 	bool receiveMessage(Message *m);
 	TemperatureActor();
 };
@@ -134,6 +137,8 @@ bool TemperatureActor::receiveMessage(Message *m) {
 			error("Device not detected!\n");
 			return false;
 		}
+	}else if(m->getLabel() == TAM_MODE){
+
 	} else {
 		return false;
 	}
