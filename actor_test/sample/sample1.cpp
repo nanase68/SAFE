@@ -181,7 +181,7 @@ bool SpeakerActor::receiveMessage(Message *m) {
 		for (float i = 2000.0; i < 10000.0; i += 100) {
 			spkr.period(1.0 / i);
 			spkr = 0.5;
-			wait(0.1);
+			waitTimeout(0.1);
 		}
 		spkr = 0.0;
 		return true;
@@ -220,9 +220,9 @@ short Rn42SlaveActor::RN42_reset(void) {
 	short i = 0;
 
 	RN42_reset_pin = 0;
-	wait_ms(500);
+	waitTimeout(0.5);
 	RN42_reset_pin = 1;
-	wait(2);
+	waitTimeout(2);
 	pc.printf("checking reset\n");
 	RN42.printf("$$$");
 	for (i = 0; i < 3; i++) {
@@ -265,6 +265,9 @@ void sample1() {
 	sysActor.setPeriodicTask(&a4, &m4, 0.1);
 	sysActor.setPeriodicTask(&a5, &m5, 0.1);
 	sysActor.setPeriodicTask(&a6, &m6, 0.1);
+	//a5.sendTo(&a5, &m5);
+	//a6.sendTo(&a6, &m6);
+
 
 	printf("Start!!\n");
 	Actor::start();

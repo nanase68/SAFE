@@ -33,7 +33,18 @@ bool Actor::sendTo(Actor *dest, Message* m){
 Message *Actor::sendWait(Actor *dest, Message* m){
 	this->sendTo(dest, m);
 	MessageHandlerThread *handler = scheduler.runningHandler;
+	// ここでこの処理をttswitchし、次に呼ばれるまで待機状態にする
 	return handler->waitForMessage(dest);
+}
+
+bool Actor::waitTimeout(float time){
+	float* f = new float(time);
+	Message* m = new Message(0, (void*)f);
+	this->sendWait(&sysActor, m);
+
+	delete f;
+	delete m;
+	return true;
 }
 
 bool Actor::sendToPriorityQueue(Actor *dest, Message *m){
