@@ -148,6 +148,9 @@ bool TemperatureActor::receiveMessage(Message *m) {
 }
 TemperatureActor temperatureActor;
 
+/*
+ *
+ */
 class JoysticInputActor: public Actor {
 private:
 	int lastFire;
@@ -174,6 +177,32 @@ bool JoysticInputActor::receiveMessage(Message *m) {
 	return false;
 }
 JoysticInputActor joyStickInputActor;
+
+/*
+ *
+ */
+class PcInputActor: public Actor {
+public:
+	bool receiveMessage(Message *m);
+};
+bool PcInputActor::receiveMessage(Message *m) {
+	while (pc.readable()) {
+		char c = pc.getc();
+		if ((c == 'c') || (c == 'f')) {
+			Message* msg;
+			if (c == 'c') {
+				msg = new Message(TemperatureActor::TAM_MODE,
+						(void*) TemperatureActor::TEMP_C);
+			} else {
+				msg = new Message(TemperatureActor::TAM_MODE,
+						(void*) TemperatureActor::TEMP_F);
+			}
+			sendTo(&temperatureActor, msg);
+		}
+	}
+	return false;
+}
+PcInputActor pcInputActor;
 }	//namespace
 
 /*
@@ -186,6 +215,7 @@ void sample2() {
 
 	sysActor.setPeriodicTask(&temperatureActor, &msgTemp, 1.0);
 	sysActor.setPeriodicTask(&joyStickInputActor, &m, 0.1);
+	sysActor.setPeriodicTask(&pcInputActor, &m, 0.5);
 
 	Actor::start();
 	return;
