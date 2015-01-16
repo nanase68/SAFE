@@ -10,11 +10,6 @@
 Message::Message(){
 
 }
-Message::Message(Actor* sender, Actor* destination) {
-	Message::sender = sender;
-	Message::destination = destination;
-}
-
 Message::~Message() {
 	// TODO Auto-generated destructor stub
 }

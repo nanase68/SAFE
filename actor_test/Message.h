@@ -27,7 +27,6 @@ public:
 	Message();
 	Message(int label): label(label){};
 	Message(int label, void* content): label(label), content(content){};
-	Message(Actor*, Actor*);
 	virtual ~Message();
 };
 
