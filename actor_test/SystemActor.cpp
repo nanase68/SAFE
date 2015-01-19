@@ -35,6 +35,7 @@ bool SystemActor::receiveMessage(Message* m) {
 		puts("wait");
 	}else if(label == sysCmd::DELETE_TOC){
 		puts("remove");
+		delete (TimeoutComposite*)(tocList->get());
 		tocList->remove();
 	}
 	return true;

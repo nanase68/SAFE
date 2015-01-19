@@ -15,14 +15,16 @@ namespace mbed{
 class Actor;
 class Message;
 
+// 抽象クラス
 class FlipperComposite{
 public:
 	Actor *destination;
 	Message *message;
 
-	virtual void autoSend();
+	virtual void autoSend() = 0; //純粋仮想関数
 
 	FlipperComposite(Actor *dest, Message *msg): destination(dest), message(msg){};
+	virtual ~FlipperComposite(){}
 };
 
 class TickerComposite: FlipperComposite{

@@ -8,7 +8,7 @@
 #include "SimpleList.h"
 
 void SimpleList::add(void* content){
-	SimpleListContent* slc = new SimpleListContent();
+	SimpleListContent* slc = new SimpleListContent(); // create SimpleListContent
 	slc->content = content;
 	slc->next = head;
 	head = slc;
@@ -20,6 +20,6 @@ void* SimpleList::get(){
 bool SimpleList::remove(){
 	SimpleListContent* temp = head;
 	head = head->next;
-	delete temp;
+	delete temp; // delete SimpleListContent
 	return true;
 }
