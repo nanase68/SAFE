@@ -38,12 +38,11 @@ Message *Actor::sendWait(Actor *dest, Message* m){
 }
 
 bool Actor::waitTimeout(float time){
-	float* f = new float(time);
+	float* f = &time;
 	Message* m = new Message(sysCmd::WAIT, (void*)f);
 	printf("%p\n",m);
 	this->sendWait(&sysActor, m);
 
-	delete f;
 	delete m;
 	return true;
 }
