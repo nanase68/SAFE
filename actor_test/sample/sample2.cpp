@@ -159,6 +159,7 @@ void SendTempC() {
 			(void*) TemperatureActor::TEMP_C);
 	sysActor.sendTo(&temperatureActor, msg);
 }
+// TODO: InterruptInによる割り込みが、割り込みしてはいけないタイミングで行われていないか考える
 void joystickInterrupt() {
 	joy_u.rise(&SendTempC);
 	joy_d.rise(&SendTempC);
