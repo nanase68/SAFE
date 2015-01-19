@@ -14,11 +14,12 @@ void SimpleList::add(void* content){
 	head = slc;
 }
 void* SimpleList::get(){
-	return (void*)head;
+	return (void*)(head->content);
 }
 
 bool SimpleList::remove(){
 	SimpleListContent* temp = head;
 	head = head->next;
 	delete temp;
+	return true;
 }
