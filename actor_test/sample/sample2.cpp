@@ -37,8 +37,13 @@ const float BRIGHT = 0.9;
 const float OFF = 1.0;
 
 // joystick
-BusIn joy(p15, p12, p13, p16); // u d l r
-DigitalIn fire(p14);
+//BusIn joy(p15, p12, p13, p16); // u d l r
+//DigitalIn fire(p14);
+InterruptIn joy_u(p15);
+InterruptIn joy_d(p12);
+InterruptIn joy_l(p13);
+InterruptIn joy_r(p16);
+InterruptIn joy_c(p14);
 
 // speaker
 PwmOut spkr(p26);
@@ -117,7 +122,7 @@ bool TemperatureActor::receiveMessage(Message *m) {
 		char* s;
 		s = new char[CHAR_SIZE];
 		// 前回と同じ値なら更新しない
-		if (pastTemp == (float) sensor) {
+		if ((pastTemp == (float) sensor) && (m->getLabel() == TAM_CHECK)){
 			return false;
 		}
 		if (displayMode == TEMP_C) {
@@ -138,32 +143,23 @@ TemperatureActor temperatureActor;
 /*
  *
  */
-class JoysticInputActor: public Actor {
-private:
-	int lastFire;
-	int lastJoy;
-public:
-	bool receiveMessage(Message *m);
-};
-bool JoysticInputActor::receiveMessage(Message *m) {
-	if (fire && (!lastFire)) {
-		Message* msg = new Message(TemperatureActor::TAM_MODE,
-				(void*) TemperatureActor::TEMP_F);
-		sendTo(&temperatureActor, msg);
-		lastFire = fire;
-	} else if ((joy != 0b0000) && (lastJoy == 0b0000)) {
-		Message* msg = new Message(TemperatureActor::TAM_MODE,
-				(void*) TemperatureActor::TEMP_C);
-		sendTo(&temperatureActor, msg);
-		lastJoy = joy;
-	} else if ((!fire) && lastFire) {
-		lastFire = 0;
-	} else if ((joy == 0b0000) && lastJoy != 0b0000) {
-		lastJoy = 0b0000;
-	}
-	return false;
+void SendTempF() {
+	Message* msg = new Message(TemperatureActor::TAM_MODE,
+			(void*) TemperatureActor::TEMP_F);
+	sysActor.sendTo(&temperatureActor, msg);
 }
-JoysticInputActor joyStickInputActor;
+void SendTempC() {
+	Message* msg = new Message(TemperatureActor::TAM_MODE,
+			(void*) TemperatureActor::TEMP_C);
+	sysActor.sendTo(&temperatureActor, msg);
+}
+void joystickInterrupt() {
+	joy_u.rise(&SendTempC);
+	joy_d.rise(&SendTempC);
+	joy_l.rise(&SendTempC);
+	joy_r.rise(&SendTempC);
+	joy_c.rise(&SendTempF);
+}
 
 /*
  *
@@ -201,8 +197,8 @@ void sample2() {
 	Message msgTemp(TemperatureActor::TAM_CHECK, v);
 
 	sysActor.setPeriodicTask(&temperatureActor, &msgTemp, 1.0);
-	sysActor.setPeriodicTask(&joyStickInputActor, &m, 0.1);
 	sysActor.setPeriodicTask(&pcInputActor, &m, 0.5);
+	joystickInterrupt();
 
 	Actor::start();
 	return;
