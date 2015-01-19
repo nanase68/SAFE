@@ -10,7 +10,7 @@
 #include "Message.h"
 #include "SystemActor.h"
 
-// MEMO: ハンドラモードでprintfやdelete, newをしてはいけない！
+
 void TickerComposite::autoSend(){
 	sysActor.sendToPriorityQueue(TickerComposite::destination, TickerComposite::message);
 }
@@ -24,8 +24,7 @@ TickerComposite::~TickerComposite(){
 }
 
 void TimeoutComposite::autoSend(){
-	sysActor.sendToPriorityQueue(TimeoutComposite::destination, TimeoutComposite::message);
-	sysActor.sendToPriorityQueue(&sysActor, sysActor.getMsgDeleteToc());
+	sysActor.timeoutCallback(TimeoutComposite::destination, TimeoutComposite::message);
 }
 TimeoutComposite::TimeoutComposite(Actor *dest, Message *msg, float waitTime): FlipperComposite(dest, msg){
 	TimeoutComposite::timeout = new Timeout();
