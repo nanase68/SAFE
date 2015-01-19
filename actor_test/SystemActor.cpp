@@ -43,8 +43,12 @@ bool SystemActor::receiveMessage(Message* m) {
 
 SystemActor::SystemActor() {
 	msg_deleteToc = new Message(sysCmd::DELETE_TOC);
+	SystemActor::tcList = new SimpleList();
+	SystemActor::tocList = new SimpleList();
 }
 
 SystemActor::~SystemActor() {
 	delete msg_deleteToc;
+	delete SystemActor::tcList;
+	delete SystemActor::tocList;
 }
