@@ -22,26 +22,28 @@ bool SystemActor::setPeriodicTask(Actor *dest, Message *msg,
 	tcList->add(tc);
 	return true;
 }
-void SystemActor::timeoutCallback(Actor* dest, Message* m) {
-	// MEMO: ハンドラモードでprintfやdelete, newをしてはいけない！
-	sendToPriorityQueue(dest, m);
-	//delete tocList->get();
-	//tocList->remove();
-}
+
 bool SystemActor::receiveMessage(Message* m) {
-	if (m->getLabel() == sysCmd::WAIT) {
+	int label = m->getLabel();
+	if (label == sysCmd::WAIT) {
 		float* waitTime = (float*) m->getContent();
 		TimeoutComposite *tc = new TimeoutComposite(m->sender, m, *waitTime);
 		tocList->add(tc);
+	}else if(label == sysCmd::DELETE_TOC){
+		delete (TimeoutComposite*)(tocList->get());
+		tocList->remove();
 	}
 	return true;
 }
 
 SystemActor::SystemActor() {
-	// TODO Auto-generated constructor stub
-
+	msg_deleteToc = new Message(sysCmd::DELETE_TOC);
+	SystemActor::tcList = new SimpleList();
+	SystemActor::tocList = new SimpleList();
 }
 
 SystemActor::~SystemActor() {
-	// TODO Auto-generated destructor stub
+	delete msg_deleteToc;
+	delete SystemActor::tcList;
+	delete SystemActor::tocList;
 }
