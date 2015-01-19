@@ -13,6 +13,12 @@
 #include "SimpleList.h"
 class TickerComposite;
 
+namespace sysCmd{
+enum SystemCmd{
+	NONE, WAIT, INTERRUPT,
+};
+
+}//namespace
 class SystemActor: public Actor {
 private:
 	SimpleList *tcList;
