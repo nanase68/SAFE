@@ -142,9 +142,6 @@ bool TemperatureActor::receiveMessage(Message *m) {
 		delete m;
 	}
 
-	puts("b_timeout");
-	waitTimeout(0.1);
-	puts("a_timeout");
 	return false;
 }
 TemperatureActor temperatureActor;
