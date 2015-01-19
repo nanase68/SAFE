@@ -136,6 +136,9 @@ bool TemperatureActor::receiveMessage(Message *m) {
 	} else {
 		error("Device not detected!\n");
 	}
+	puts("b_timeout");
+	waitTimeout(0.1);
+	puts("a_timeout");
 	return false;
 }
 TemperatureActor temperatureActor;
