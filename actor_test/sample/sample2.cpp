@@ -95,6 +95,7 @@ LcdPrintActor lcdPrintActor;
 class TemperatureActor: public Actor {
 private:
 	float pastTemp;
+	bool checkSensor(Message *m);
 public:
 	enum Mode {
 		TAM_CHECK, TAM_MODE,
@@ -108,23 +109,16 @@ public:
 TemperatureActor::TemperatureActor() {
 	printf("TemperatureActor start!!\n");
 }
-bool TemperatureActor::receiveMessage(Message *m) {
-	if (m->getLabel() == TAM_MODE) {
-		displayMode = (DisplayMode) (int) (m->getContent());
-		delete m;
-	}
-
+bool TemperatureActor::checkSensor(Message *m) {
 	//Try to open the LM75B
 	if (sensor.open()) {
-		//Print the current temperature
-		//printf("Temp = %.3f\n", (float) sensor);
+		// 前回と同じ値なら更新しない
+		if ((pastTemp == (float) sensor) && (m->getLabel() == TAM_CHECK)) {
+			return true;
+		}
 
 		char* s;
 		s = new char[CHAR_SIZE];
-		// 前回と同じ値なら更新しない
-		if ((pastTemp == (float) sensor) && (m->getLabel() == TAM_CHECK)){
-			return false;
-		}
 		if (displayMode == TEMP_C) {
 			sprintf(s, "Temp = %.3f C\n", (float) sensor);
 		} else {
@@ -133,9 +127,21 @@ bool TemperatureActor::receiveMessage(Message *m) {
 		Message* msgs = new Message(0, s);
 		sendTo(&lcdPrintActor, msgs);
 		pastTemp = (float) sensor;
+		return true;
 	} else {
 		error("Device not detected!\n");
+		return false;
 	}
+}
+bool TemperatureActor::receiveMessage(Message *m) {
+	if (m->getLabel() == TAM_CHECK) {
+		checkSensor(m);
+	} else if (m->getLabel() == TAM_MODE) {
+		displayMode = (DisplayMode) (int) (m->getContent());
+		checkSensor(m);
+		delete m;
+	}
+
 	puts("b_timeout");
 	waitTimeout(0.1);
 	puts("a_timeout");
