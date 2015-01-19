@@ -15,24 +15,25 @@ SystemActor sysActor;
 /*
  *  periodic time : sec
  */
-bool SystemActor::setPeriodicTask(Actor *dest, Message *msg, float periodicTime){
+bool SystemActor::setPeriodicTask(Actor *dest, Message *msg,
+		float periodicTime) {
 	TickerComposite *tc = new TickerComposite(dest, msg, periodicTime);
 	// MEMO: このnewに対応するdeleteはいまのところない
 	tcList->add(tc);
 	return true;
 }
-void SystemActor::timeoutCallback(Actor* dest, Message* m){
+void SystemActor::timeoutCallback(Actor* dest, Message* m) {
 	// MEMO: ハンドラモードでprintfやdelete, newをしてはいけない！
 	sendToPriorityQueue(dest, m);
 	//delete tocList->get();
 	//tocList->remove();
 }
-bool SystemActor::receiveMessage(Message* m){
-	//puts("system actor receive message");
-	float* waitTime = (float*)m->getContent();
-	TimeoutComposite *tc = new TimeoutComposite(m->sender, m, *waitTime);
-	tocList->add(tc);
-
+bool SystemActor::receiveMessage(Message* m) {
+	if (m->getLabel() == sysCmd::WAIT) {
+		float* waitTime = (float*) m->getContent();
+		TimeoutComposite *tc = new TimeoutComposite(m->sender, m, *waitTime);
+		tocList->add(tc);
+	}
 	return true;
 }
 
