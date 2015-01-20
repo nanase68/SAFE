@@ -171,28 +171,44 @@ void joystickInterrupt() {
 /*
  *
  */
-class PcInputActor: public Actor {
+class PcInputControlActor: public Actor {
 public:
 	bool receiveMessage(Message *m);
 };
-bool PcInputActor::receiveMessage(Message *m) {
+bool PcInputControlActor::receiveMessage(Message *m) {
+	char c = (char)(int)m->getContent();
+	if (c == 'c') {
+		Message* msg;
+		msg = new Message(TemperatureActor::TAM_MODE,
+				(void*) TemperatureActor::TEMP_C);
+		sendTo(&temperatureActor, msg);
+	} else if (c == 'f') {
+		Message* msg;
+		msg = new Message(TemperatureActor::TAM_MODE,
+				(void*) TemperatureActor::TEMP_F);
+		sendTo(&temperatureActor, msg);
+	}
+	delete m;
+	return true;
+}
+PcInputControlActor pcInputControlActor;
+
+/*
+ *
+ */
+class PcInputCatchActor: public Actor {
+public:
+	bool receiveMessage(Message *m);
+};
+bool PcInputCatchActor::receiveMessage(Message *m) {
 	while (pc.readable()) {
-		char c = pc.getc();
-		if ((c == 'c') || (c == 'f')) {
-			Message* msg;
-			if (c == 'c') {
-				msg = new Message(TemperatureActor::TAM_MODE,
-						(void*) TemperatureActor::TEMP_C);
-			} else {
-				msg = new Message(TemperatureActor::TAM_MODE,
-						(void*) TemperatureActor::TEMP_F);
-			}
-			sendTo(&temperatureActor, msg);
-		}
+		int i = pc.getc();
+		Message* msg = new Message(0, (void*)i);
+		sendTo(&pcInputControlActor, msg);
 	}
 	return false;
 }
-PcInputActor pcInputActor;
+PcInputCatchActor pcInputCatchActor;
 }	//namespace
 
 /*
@@ -204,7 +220,7 @@ void sample2() {
 	Message msgTemp(TemperatureActor::TAM_CHECK, v);
 
 	sysActor.setPeriodicTask(&temperatureActor, &msgTemp, 1.0);
-	sysActor.setPeriodicTask(&pcInputActor, &m, 0.5);
+	sysActor.setPeriodicTask(&pcInputCatchActor, &m, 0.5);
 	joystickInterrupt();
 
 	Actor::start();
