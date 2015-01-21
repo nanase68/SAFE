@@ -56,6 +56,20 @@ Serial pc(USBTX, USBRX);
 LM75B sensor(p28, p27);
 
 /*
+ * 関数プロトタイプ宣言
+ */
+class PcInputControlActor: public Actor {
+public:
+	bool receiveMessage(Message *m);
+};
+PcInputControlActor pcInputControlActor;
+
+class PcInputCatchActor: public Actor {
+public:
+	bool receiveMessage(Message *m);
+};
+PcInputCatchActor pcInputCatchActor;
+/*
  *
  */
 class LcdPrintActor: public Actor {
@@ -171,44 +185,67 @@ void joystickInterrupt() {
 /*
  *
  */
-class PcInputControlActor: public Actor {
-public:
-	bool receiveMessage(Message *m);
-};
 bool PcInputControlActor::receiveMessage(Message *m) {
-	char c = (char)(int)m->getContent();
-	if (c == 'c') {
-		Message* msg;
-		msg = new Message(TemperatureActor::TAM_MODE,
-				(void*) TemperatureActor::TEMP_C);
-		sendTo(&temperatureActor, msg);
-	} else if (c == 'f') {
-		Message* msg;
-		msg = new Message(TemperatureActor::TAM_MODE,
-				(void*) TemperatureActor::TEMP_F);
-		sendTo(&temperatureActor, msg);
-	}
+	char c;
+	Message msg;
+
+	c = (char) (int) m->getContent();
 	delete m;
+	if (c != 't') {
+		return false;
+	}
+	m = sendWait(&pcInputCatchActor, &msg);
+
+	c = (char) (int) m->getContent();
+	delete m;
+	if (c != 'e') {
+		return false;
+	}
+	m = sendWait(&pcInputCatchActor, &msg);
+
+	c = (char) (int) m->getContent();
+	delete m;
+	if (c != 'm') {
+		return false;
+	}
+	m = sendWait(&pcInputCatchActor, &msg);
+
+	c = (char) (int) m->getContent();
+	delete m;
+	if (c != 'p') {
+		return false;
+	}
+	m = sendWait(&pcInputCatchActor, &msg);
+
+	c = (char) (int) m->getContent();
+	delete m;
+	if ((c != 'f') && (c != 'c')) {
+		return false;
+	}
+	if (c == 'f') {
+		m = new Message(TemperatureActor::TAM_MODE,
+				(void*) TemperatureActor::TEMP_F);
+	} else {
+		m = new Message(TemperatureActor::TAM_MODE,
+				(void*) TemperatureActor::TEMP_C);
+
+	}
+	sendTo(&temperatureActor, m);
+
 	return true;
 }
-PcInputControlActor pcInputControlActor;
 
 /*
  *
  */
-class PcInputCatchActor: public Actor {
-public:
-	bool receiveMessage(Message *m);
-};
 bool PcInputCatchActor::receiveMessage(Message *m) {
 	while (pc.readable()) {
 		int i = pc.getc();
-		Message* msg = new Message(0, (void*)i);
+		Message* msg = new Message(0, (void*) i);
 		sendTo(&pcInputControlActor, msg);
 	}
 	return false;
 }
-PcInputCatchActor pcInputCatchActor;
 }	//namespace
 
 /*
