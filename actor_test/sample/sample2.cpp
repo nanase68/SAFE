@@ -56,6 +56,20 @@ Serial pc(USBTX, USBRX);
 LM75B sensor(p28, p27);
 
 /*
+ * 関数プロトタイプ宣言
+ */
+class PcInputControlActor: public Actor {
+public:
+	bool receiveMessage(Message *m);
+};
+PcInputControlActor pcInputControlActor;
+
+class PcInputCatchActor: public Actor {
+public:
+	bool receiveMessage(Message *m);
+};
+PcInputCatchActor pcInputCatchActor;
+/*
  *
  */
 class LcdPrintActor: public Actor {
@@ -171,28 +185,67 @@ void joystickInterrupt() {
 /*
  *
  */
-class PcInputActor: public Actor {
-public:
-	bool receiveMessage(Message *m);
-};
-bool PcInputActor::receiveMessage(Message *m) {
+bool PcInputControlActor::receiveMessage(Message *m) {
+	char c;
+	Message msg;
+
+	c = (char) (int) m->getContent();
+	delete m;
+	if (c != 't') {
+		return false;
+	}
+	m = sendWait(&pcInputCatchActor, &msg);
+
+	c = (char) (int) m->getContent();
+	delete m;
+	if (c != 'e') {
+		return false;
+	}
+	m = sendWait(&pcInputCatchActor, &msg);
+
+	c = (char) (int) m->getContent();
+	delete m;
+	if (c != 'm') {
+		return false;
+	}
+	m = sendWait(&pcInputCatchActor, &msg);
+
+	c = (char) (int) m->getContent();
+	delete m;
+	if (c != 'p') {
+		return false;
+	}
+	m = sendWait(&pcInputCatchActor, &msg);
+
+	c = (char) (int) m->getContent();
+	delete m;
+	if ((c != 'f') && (c != 'c')) {
+		return false;
+	}
+	if (c == 'f') {
+		m = new Message(TemperatureActor::TAM_MODE,
+				(void*) TemperatureActor::TEMP_F);
+	} else {
+		m = new Message(TemperatureActor::TAM_MODE,
+				(void*) TemperatureActor::TEMP_C);
+
+	}
+	sendTo(&temperatureActor, m);
+
+	return true;
+}
+
+/*
+ *
+ */
+bool PcInputCatchActor::receiveMessage(Message *m) {
 	while (pc.readable()) {
-		char c = pc.getc();
-		if ((c == 'c') || (c == 'f')) {
-			Message* msg;
-			if (c == 'c') {
-				msg = new Message(TemperatureActor::TAM_MODE,
-						(void*) TemperatureActor::TEMP_C);
-			} else {
-				msg = new Message(TemperatureActor::TAM_MODE,
-						(void*) TemperatureActor::TEMP_F);
-			}
-			sendTo(&temperatureActor, msg);
-		}
+		int i = pc.getc();
+		Message* msg = new Message(0, (void*) i);
+		sendTo(&pcInputControlActor, msg);
 	}
 	return false;
 }
-PcInputActor pcInputActor;
 }	//namespace
 
 /*
@@ -204,7 +257,7 @@ void sample2() {
 	Message msgTemp(TemperatureActor::TAM_CHECK, v);
 
 	sysActor.setPeriodicTask(&temperatureActor, &msgTemp, 1.0);
-	sysActor.setPeriodicTask(&pcInputActor, &m, 0.5);
+	sysActor.setPeriodicTask(&pcInputCatchActor, &m, 0.5);
 	joystickInterrupt();
 
 	Actor::start();
