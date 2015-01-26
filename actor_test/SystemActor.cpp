@@ -59,5 +59,3 @@ SystemActor &SystemActor::operator <<(StateTransReqMsg *msg) {
 
 	return *this;
 }
-
-SystemActor::TCList *SystemActor::tcList = 0;
