@@ -9,6 +9,7 @@ DigitalOut led1(LED1);
 Actor actor;
 
 void sample1();
+void sample2();
 void sendWaitSample();
 void stateTransTest();
 

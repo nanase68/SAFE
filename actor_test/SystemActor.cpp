@@ -17,23 +17,38 @@ SystemActor sysActor;
 /*
  *  periodic time : sec
  */
-bool SystemActor::setPeriodicTask(Actor *dest, Message *msg, float periodicTime){
+bool SystemActor::setPeriodicTask(Actor *dest, Message *msg,
+		float periodicTime) {
 	TickerComposite *tc = new TickerComposite(dest, msg, periodicTime);
-	TCList *tcl = new TCList;
-	tcl->tc = tc;
-	tcl->next = tcList;
-	tcList = tcl;
+	// MEMO: このnewに対応するdeleteはいまのところない
+	tcList->add(tc);
+	return true;
+}
 
+bool SystemActor::receiveMessage(Message* m) {
+	int label = m->getLabel();
+	if (label == sysCmd::WAIT) {
+		// void*からfloatにキャスト
+		float waitTime = *(float*) m->getContent();
+		TimeoutComposite *tc = new TimeoutComposite(m->sender, m, waitTime);
+		tocList->add(tc);
+	}else if(label == sysCmd::DELETE_TOC){
+		delete (TimeoutComposite*)(tocList->get());
+		tocList->remove();
+	}
 	return true;
 }
 
 SystemActor::SystemActor() {
-	// TODO Auto-generated constructor stub
-
+	msg_deleteToc = new Message(sysCmd::DELETE_TOC);
+	SystemActor::tcList = new SimpleList();
+	SystemActor::tocList = new SimpleList();
 }
 
 SystemActor::~SystemActor() {
-	// TODO Auto-generated destructor stub
+	delete msg_deleteToc;
+	delete SystemActor::tcList;
+	delete SystemActor::tocList;
 }
 
 SystemActor &SystemActor::operator <<(StateTransReqMsg *msg) {

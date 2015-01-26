@@ -122,8 +122,14 @@ void SchedulerThread::run() {
 
 			waitingHandler = findWaitingHandler(m->destination);
 
+			// この部分で送られたメッセージの送信者が待機状態から復帰するための送信者かどうか判別している
 			if(waitingHandler->waitFor == m->sender) {
+				runningHandler = waitingHandler;
+				waitingHandler->msg = m;
+
 				waitingHandler->awake(&context);
+
+				runningHandler = 0;
 			} else {
 				queue->enqueue(m);
 			}

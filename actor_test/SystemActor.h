@@ -9,21 +9,28 @@
 #define SYSTEMACTOR_H_
 
 #include "Actor.h"
+#include "Message.h"
+#include "SimpleList.h"
 class TickerComposite;
 class StateTransReqMsg;
 
+namespace sysCmd{
+enum SystemCmd{
+	NONE, WAIT, DELETE_TOC,
+};
+
+}//namespace
 class SystemActor: public Actor {
 private:
-	struct TCList {
-		TickerComposite *tc;
-		TCList *next;
-	};
-	static TCList *tcList;
+	SimpleList *tcList;
+	SimpleList *tocList;
+	Message *msg_deleteToc;
 
 public:
 	bool setPeriodicTask(Actor *dest, Message *msg, float periodicTime);
-
-	void makeTicker();
+	void timeoutCallback(Actor *dest, Message *msg);
+	bool receiveMessage(Message* m);
+	Message* getMsgDeleteToc(){return msg_deleteToc;}
 
 	SystemActor();
 	virtual ~SystemActor();
