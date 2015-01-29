@@ -26,7 +26,12 @@ bool Actor::sendToQueue(Actor *dest, Message *m, GlobalQueue *gqueue){
 }
 
 bool Actor::sendTo(Actor *dest, Message* m){
-	this->sendToQueue(dest, m, &globalNormalQueue);
+	if(dest == &sysActor) {
+		// sysActorへのMessageは重要なのでPriorityQueueに
+		this->sendToQueue(dest, m, &globalPriorityQueue);
+	} else {
+		this->sendToQueue(dest, m, &globalNormalQueue);
+	}
 	return true;
 }
 
