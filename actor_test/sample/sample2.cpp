@@ -17,33 +17,13 @@
 
 namespace {
 
-// LED
-DigitalOut led1(LED1);
-DigitalOut led2(LED2);
-DigitalOut led3(LED3);
-DigitalOut led4(LED4);
-
-// lcd
-C12832 lcd(p5, p7, p6, p8, p11);
-
-// joystick
-InterruptIn joy_u(p15);
-InterruptIn joy_d(p12);
-InterruptIn joy_l(p13);
-InterruptIn joy_r(p16);
-InterruptIn joy_c(p14);
-
-// シリアル通信
-Serial pc(USBTX, USBRX);
-
-// LM75B
-//Create an LM75B object at the default address (ADDRESS_0)
-LM75B sensor(p28, p27);
-
 /*
  * 関数プロトタイプ宣言
  */
 class LcdPrintActor: public Actor {
+private:
+	// lcd
+	C12832 lcd;
 public:
 	bool receiveMessage(Message*);
 	int label2locate(int i);
@@ -53,6 +33,8 @@ public:
 LcdPrintActor lcdPrintActor;
 class TemperatureActor: public Actor {
 private:
+// LM75B
+	LM75B sensor;
 	float pastTemp;
 	bool checkSensor(Message *m);
 public:
@@ -63,7 +45,7 @@ public:
 		TEMP_C, TEMP_F,
 	} displayMode;
 	bool receiveMessage(Message *m);
-	TemperatureActor();
+	TemperatureActor():sensor(p28, p27){};
 };
 TemperatureActor temperatureActor;
 
@@ -74,8 +56,12 @@ public:
 PcInputControlActor pcInputControlActor;
 
 class PcInputCatchActor: public Actor {
+private:
+	// シリアル通信
+	Serial pc;
 public:
 	bool receiveMessage(Message *m);
+	PcInputCatchActor():pc(USBTX, USBRX){};
 };
 PcInputCatchActor pcInputCatchActor;
 
@@ -83,7 +69,7 @@ PcInputCatchActor pcInputCatchActor;
  *
  */
 LcdPrintActor::LcdPrintActor() :
-		Actor() {
+		Actor(), lcd(p5, p7, p6, p8, p11) {
 	lcd.set_auto_up(0);
 }
 bool LcdPrintActor::receiveMessage(Message *m) {
@@ -108,9 +94,6 @@ int LcdPrintActor::label2locate(int i) {
 /*
  *
  */
-TemperatureActor::TemperatureActor() {
-	printf("TemperatureActor start!!\n");
-}
 bool TemperatureActor::checkSensor(Message *m) {
 	//Try to open the LM75B
 	if (sensor.open()) {
@@ -149,6 +132,14 @@ bool TemperatureActor::receiveMessage(Message *m) {
 /*
  *
  */
+
+// joystick
+InterruptIn joy_u(p15);
+InterruptIn joy_d(p12);
+InterruptIn joy_l(p13);
+InterruptIn joy_r(p16);
+InterruptIn joy_c(p14);
+
 Message msg_f_interrupt(TemperatureActor::TAM_MODE,
 		(void*) TemperatureActor::TEMP_F);
 Message msg_c_interrupt(TemperatureActor::TAM_MODE,
