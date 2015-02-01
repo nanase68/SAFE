@@ -14,50 +14,41 @@
 #include "LM75B/LM75B.h"
 
 #define CHAR_SIZE 16
-// MEMO: ここの値が大きすぎるとLcdPrintActor::receiveMessageが呼ばれないバグ
-//　　　　　現在の時点でも長く起動すると↑のバグが発生
+
 namespace {
-
-// LED
-DigitalOut led1(LED1);
-DigitalOut led2(LED2);
-DigitalOut led3(LED3);
-DigitalOut led4(LED4);
-
-// Analog input
-AnalogIn pot1(p19);
-AnalogIn pot2(p20);
-
-// lcd
-C12832 lcd(p5, p7, p6, p8, p11);
-
-// rgb
-// rgbの宣言はクラス宣言で行う
-const float BRIGHT = 0.9;
-const float OFF = 1.0;
-
-// joystick
-//BusIn joy(p15, p12, p13, p16); // u d l r
-//DigitalIn fire(p14);
-InterruptIn joy_u(p15);
-InterruptIn joy_d(p12);
-InterruptIn joy_l(p13);
-InterruptIn joy_r(p16);
-InterruptIn joy_c(p14);
-
-// speaker
-PwmOut spkr(p26);
-
-// シリアル通信
-Serial pc(USBTX, USBRX);
-
-// LM75B
-//Create an LM75B object at the default address (ADDRESS_0)
-LM75B sensor(p28, p27);
 
 /*
  * 関数プロトタイプ宣言
  */
+class LcdPrintActor: public Actor {
+private:
+	// lcd
+	C12832 lcd;
+public:
+	bool receiveMessage(Message*);
+	int label2locate(int i);
+
+	LcdPrintActor();
+};
+LcdPrintActor lcdPrintActor;
+class TemperatureActor: public Actor {
+private:
+// LM75B
+	LM75B sensor;
+	float pastTemp;
+	bool checkSensor(Message *m);
+public:
+	enum Mode {
+		TAM_CHECK, TAM_MODE,
+	};
+	enum DisplayMode {
+		TEMP_C, TEMP_F,
+	} displayMode;
+	bool receiveMessage(Message *m);
+	TemperatureActor():sensor(p28, p27){};
+};
+TemperatureActor temperatureActor;
+
 class PcInputControlActor: public Actor {
 public:
 	bool receiveMessage(Message *m);
@@ -65,22 +56,20 @@ public:
 PcInputControlActor pcInputControlActor;
 
 class PcInputCatchActor: public Actor {
+private:
+	// シリアル通信
+	Serial pc;
 public:
 	bool receiveMessage(Message *m);
+	PcInputCatchActor():pc(USBTX, USBRX){};
 };
 PcInputCatchActor pcInputCatchActor;
+
 /*
  *
  */
-class LcdPrintActor: public Actor {
-public:
-	bool receiveMessage(Message*);
-	int label2locate(int i);
-
-	LcdPrintActor();
-};
 LcdPrintActor::LcdPrintActor() :
-		Actor() {
+		Actor(), lcd(p5, p7, p6, p8, p11) {
 	lcd.set_auto_up(0);
 }
 bool LcdPrintActor::receiveMessage(Message *m) {
@@ -101,28 +90,10 @@ int LcdPrintActor::label2locate(int i) {
 		return 0;
 	}
 }
-LcdPrintActor lcdPrintActor;
 
 /*
  *
  */
-class TemperatureActor: public Actor {
-private:
-	float pastTemp;
-	bool checkSensor(Message *m);
-public:
-	enum Mode {
-		TAM_CHECK, TAM_MODE,
-	};
-	enum DisplayMode {
-		TEMP_C, TEMP_F,
-	} displayMode;
-	bool receiveMessage(Message *m);
-	TemperatureActor();
-};
-TemperatureActor::TemperatureActor() {
-	printf("TemperatureActor start!!\n");
-}
 bool TemperatureActor::checkSensor(Message *m) {
 	//Try to open the LM75B
 	if (sensor.open()) {
@@ -153,27 +124,32 @@ bool TemperatureActor::receiveMessage(Message *m) {
 	} else if (m->getLabel() == TAM_MODE) {
 		displayMode = (DisplayMode) (int) (m->getContent());
 		checkSensor(m);
-		delete m;
 	}
 
 	return false;
 }
-TemperatureActor temperatureActor;
 
 /*
  *
  */
+
+// joystick
+InterruptIn joy_u(p15);
+InterruptIn joy_d(p12);
+InterruptIn joy_l(p13);
+InterruptIn joy_r(p16);
+InterruptIn joy_c(p14);
+
+Message msg_f_interrupt(TemperatureActor::TAM_MODE,
+		(void*) TemperatureActor::TEMP_F);
+Message msg_c_interrupt(TemperatureActor::TAM_MODE,
+		(void*) TemperatureActor::TEMP_C);
 void SendTempF() {
-	Message* msg = new Message(TemperatureActor::TAM_MODE,
-			(void*) TemperatureActor::TEMP_F);
-	sysActor.sendTo(&temperatureActor, msg);
+	sysActor.sendTo(&temperatureActor, &msg_f_interrupt);
 }
 void SendTempC() {
-	Message* msg = new Message(TemperatureActor::TAM_MODE,
-			(void*) TemperatureActor::TEMP_C);
-	sysActor.sendTo(&temperatureActor, msg);
+	sysActor.sendTo(&temperatureActor, &msg_c_interrupt);
 }
-// TODO: InterruptInによる割り込みが、割り込みしてはいけないタイミングで行われていないか考える
 void joystickInterrupt() {
 	joy_u.rise(&SendTempC);
 	joy_d.rise(&SendTempC);
@@ -185,6 +161,10 @@ void joystickInterrupt() {
 /*
  *
  */
+Message msg_f_serial(TemperatureActor::TAM_MODE,
+		(void*) TemperatureActor::TEMP_F);
+Message msg_c_serial(TemperatureActor::TAM_MODE,
+		(void*) TemperatureActor::TEMP_C);
 bool PcInputControlActor::receiveMessage(Message *m) {
 	char c;
 	Message msg;
@@ -223,12 +203,9 @@ bool PcInputControlActor::receiveMessage(Message *m) {
 		return false;
 	}
 	if (c == 'f') {
-		m = new Message(TemperatureActor::TAM_MODE,
-				(void*) TemperatureActor::TEMP_F);
+		m = &msg_f_serial;
 	} else {
-		m = new Message(TemperatureActor::TAM_MODE,
-				(void*) TemperatureActor::TEMP_C);
-
+		m = &msg_c_serial;
 	}
 	sendTo(&temperatureActor, m);
 

@@ -40,6 +40,7 @@ bool SystemActor::receiveMessage(Message* m) {
 }
 
 SystemActor::SystemActor() {
+	// FIX: Timeoutの作成順と終了順が入れ違った場合、意図されてないtocが消されてしまう
 	msg_deleteToc = new Message(sysCmd::DELETE_TOC);
 	SystemActor::tcList = new SimpleList();
 	SystemActor::tocList = new SimpleList();

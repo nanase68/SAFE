@@ -18,7 +18,7 @@ public:
 	void* get();
 	bool remove();
 
-	SimpleList(){SimpleList::head = 0;}
+	SimpleList() : head(0){};
 	virtual ~SimpleList(){};
 };
 
