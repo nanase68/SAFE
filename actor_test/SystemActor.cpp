@@ -26,8 +26,9 @@ bool SystemActor::setPeriodicTask(Actor *dest, Message *msg,
 bool SystemActor::receiveMessage(Message* m) {
 	int label = m->getLabel();
 	if (label == sysCmd::WAIT) {
+		void *content = m->getContent();
 		// void*からfloatにキャスト
-		float waitTime = *(float*) m->getContent();
+		float waitTime = *(float*) &content;
 		TimeoutComposite *tc = new TimeoutComposite(m->sender, m, waitTime);
 		tocList->add(tc);
 	}else if(label == sysCmd::DELETE_TOC){
