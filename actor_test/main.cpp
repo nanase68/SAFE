@@ -12,6 +12,7 @@ void sample1();
 void sample2();
 void sendWaitSample();
 void stateTransTest();
+void stateLcdSample1();
 
 int main() {
 	//MessageInt message(&actor, &actor, 0);
@@ -20,7 +21,8 @@ int main() {
 	//actor.start();
 	//sample1();
 	//sendWaitSample();
-	stateTransTest();
+	//stateTransTest();
+	stateLcdSample1();
 	return 0;
 
 }

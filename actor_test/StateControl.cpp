@@ -92,7 +92,7 @@ void StateControl::stateTransition() {
 	scheduler.stateTransFlag = false;
 
 	//debug
-	puts("StateControl : StateTransition");
+	puts("StateControl : StateTransition start");
 
 	SACB *sacb = list;
 	while(sacb != 0) {
@@ -104,5 +104,8 @@ void StateControl::stateTransition() {
 
 	currentState = newState;
 	reqFlag = false;
+
+	//debug
+	puts("StateControl : StateTransition end");
 }
 
