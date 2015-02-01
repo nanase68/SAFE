@@ -46,6 +46,11 @@ void GlobalQueue::enqueue(Message* m) {
 	if(size_ == maxSize) {
 		// buffer overflow
 		printf("FATAL: Message Queue Overflow\n");
+		if(this == &globalPriorityQueue){
+			puts("this is globalPriorityQueue");
+		}else if(this == &globalNormalQueue){
+			puts("this is globalNormalQueue");
+		}
 		exit(1);
 	} else {
 		*tail = m;
