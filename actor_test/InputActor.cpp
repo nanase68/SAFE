@@ -15,11 +15,10 @@ bool InputActor::setInterrput(Message *msg, int pin){
 	return true;
 }
 InputActor::InputActor(): Actor() {
-	// TODO Auto-generated constructor stub
-
+	interList = new SimpleList();
 }
 
 InputActor::~InputActor() {
-	// TODO Auto-generated destructor stub
+	delete interList;
 }
 
