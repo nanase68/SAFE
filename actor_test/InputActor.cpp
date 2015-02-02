@@ -14,7 +14,7 @@ bool InputActor::setInterrput(Message *msg, int pin){
 
 	return true;
 }
-InputActor::InputActor() {
+InputActor::InputActor(): Actor() {
 	// TODO Auto-generated constructor stub
 
 }
