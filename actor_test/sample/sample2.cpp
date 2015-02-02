@@ -227,6 +227,7 @@ bool PcInputCatchActor::receiveMessage(Message *m) {
 
 /*
  * Main
+ * Actor::startは処理が戻ってこないのでここでスタックに置いたものは破棄されない
  */
 void sample2() {
 	Message m; // 中身の無いメッセージ
