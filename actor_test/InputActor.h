@@ -15,7 +15,10 @@ class InputActor: public Actor {
 private:
 	SimpleList *interList;
 public:
-	bool setInterrput(Message *msg, int pin);
+	bool setInterrput(Actor *dest, Message *msg, int pin);
+
+	void rise();
+	void fall();
 
 	InputActor();
 	virtual ~InputActor();

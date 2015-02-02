@@ -147,14 +147,19 @@ void joystickInterrupt() {
 	const PinName &joy_c = p14;
 
 	InputActor JoyStickInterrupt;
-	Message msg_f(TemperatureActor::TAM_MODE, (void*) TemperatureActor::TEMP_F);
-	Message msg_c(TemperatureActor::TAM_MODE, (void*) TemperatureActor::TEMP_C);
+	Message *msg_f = new Message(TemperatureActor::TAM_MODE, (void*) TemperatureActor::TEMP_F);
+	Message *msg_c = new Message(TemperatureActor::TAM_MODE, (void*) TemperatureActor::TEMP_C);
 
-	JoyStickInterrupt.setInterrput(&msg_c, joy_u);
-	JoyStickInterrupt.setInterrput(&msg_c, joy_d);
-	JoyStickInterrupt.setInterrput(&msg_c, joy_l);
-	JoyStickInterrupt.setInterrput(&msg_c, joy_r);
-	JoyStickInterrupt.setInterrput(&msg_f, joy_c);
+	JoyStickInterrupt.setInterrput(&temperatureActor, msg_c, joy_u);
+	JoyStickInterrupt.rise();
+	JoyStickInterrupt.setInterrput(&temperatureActor, msg_c, joy_d);
+	JoyStickInterrupt.rise();
+	JoyStickInterrupt.setInterrput(&temperatureActor, msg_c, joy_l);
+	JoyStickInterrupt.rise();
+	JoyStickInterrupt.setInterrput(&temperatureActor, msg_c, joy_r);
+	JoyStickInterrupt.rise();
+	JoyStickInterrupt.setInterrput(&temperatureActor, msg_f, joy_c);
+	JoyStickInterrupt.rise();
 }
 
 /*
