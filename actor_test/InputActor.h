@@ -9,9 +9,17 @@
 #define INPUTACTOR_H_
 
 #include "Actor.h"
+#include "SimpleList.h"
 
 class InputActor: public Actor {
+private:
+	SimpleList *interList;
 public:
+	bool setInterrput(Actor *dest, Message *msg, int pin);
+
+	void rise();
+	void fall();
+
 	InputActor();
 	virtual ~InputActor();
 };

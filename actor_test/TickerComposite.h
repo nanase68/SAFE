@@ -8,26 +8,24 @@
 #ifndef TICKERCOMPOSIT_H_
 #define TICKERCOMPOSIT_H_
 
-namespace mbed{
-	class Ticker;
-	class Timeout;
-}
+#include "mbed.h"
 class Actor;
 class Message;
 
+
 // 抽象クラス
-class FlipperComposite{
+class BaseComposite{
 public:
 	Actor *destination;
 	Message *message;
 
 	virtual void autoSend() = 0; //純粋仮想関数
 
-	FlipperComposite(Actor *dest, Message *msg): destination(dest), message(msg){};
-	virtual ~FlipperComposite(){}
+	BaseComposite(Actor *dest, Message *msg): destination(dest), message(msg){};
+	virtual ~BaseComposite(){}
 };
 
-class TickerComposite: FlipperComposite{
+class TickerComposite: BaseComposite{
 public:
 	mbed::Ticker *ticker;
 
@@ -37,7 +35,7 @@ public:
 	~TickerComposite();
 };
 
-class TimeoutComposite: FlipperComposite{
+class TimeoutComposite: BaseComposite{
 public:
 	mbed::Timeout *timeout;
 
@@ -45,5 +43,18 @@ public:
 
 	TimeoutComposite(Actor *dest, Message *msg, float waitTime);
 	~TimeoutComposite();
+};
+
+class InterruptComposite: BaseComposite{
+private:
+	mbed::InterruptIn interrputIn;
+public:
+
+	void autoSend();
+
+	void rise();
+	void fall();
+
+	InterruptComposite(Actor *dest, Message *msg, int pin): BaseComposite(dest, msg), interrputIn((PinName)pin){};
 };
 #endif /* TICKERCOMPOSIT_H_ */

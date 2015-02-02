@@ -24,14 +24,13 @@ bool SystemActor::setPeriodicTask(Actor *dest, Message *msg,
 }
 
 bool SystemActor::receiveMessage(Message* m) {
-	int label = m->getLabel();
-	if (label == sysCmd::WAIT) {
+	if (m->getLabel() == sysCmd::WAIT) {
 		void *content = m->getContent();
 		// void*からfloatにキャスト
 		float waitTime = *(float*) &content;
 		TimeoutComposite *tc = new TimeoutComposite(m->sender, m, waitTime);
 		tocList->add(tc);
-	}else if(label == sysCmd::DELETE_TOC){
+	}else if(m->getLabel() == sysCmd::DELETE_TOC){
 		delete (TimeoutComposite*)(tocList->get());
 		tocList->remove();
 	}
@@ -39,6 +38,7 @@ bool SystemActor::receiveMessage(Message* m) {
 }
 
 SystemActor::SystemActor() {
+	// FIX: Timeoutの作成順と終了順が入れ違った場合、意図されてないtocが消されてしまう
 	msg_deleteToc = new Message(sysCmd::DELETE_TOC);
 	SystemActor::tcList = new SimpleList();
 	SystemActor::tocList = new SimpleList();
