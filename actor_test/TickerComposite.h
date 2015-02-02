@@ -33,7 +33,7 @@ public:
 
 	void autoSend();
 
-	TickerComposite(Actor *dest, Message *msg, float periodcTime);
+	TickerComposite(Actor *dest, Message *msg, float periodicTime);
 	~TickerComposite();
 };
 
