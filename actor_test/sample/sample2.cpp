@@ -45,7 +45,10 @@ public:
 		TEMP_C, TEMP_F,
 	} displayMode;
 	bool receiveMessage(Message *m);
-	TemperatureActor():sensor(p28, p27){};
+	TemperatureActor() :
+			sensor(p28, p27) {
+	}
+	;
 };
 TemperatureActor temperatureActor;
 
@@ -61,7 +64,10 @@ private:
 	Serial pc;
 public:
 	bool receiveMessage(Message *m);
-	PcInputCatchActor():pc(USBTX, USBRX){};
+	PcInputCatchActor() :
+			pc(USBTX, USBRX) {
+	}
+	;
 };
 PcInputCatchActor pcInputCatchActor;
 
@@ -132,30 +138,23 @@ bool TemperatureActor::receiveMessage(Message *m) {
 /*
  *
  */
-
-// joystick
-InterruptIn joy_u(p15);
-InterruptIn joy_d(p12);
-InterruptIn joy_l(p13);
-InterruptIn joy_r(p16);
-InterruptIn joy_c(p14);
-
-Message msg_f_interrupt(TemperatureActor::TAM_MODE,
-		(void*) TemperatureActor::TEMP_F);
-Message msg_c_interrupt(TemperatureActor::TAM_MODE,
-		(void*) TemperatureActor::TEMP_C);
-void SendTempF() {
-	sysActor.sendTo(&temperatureActor, &msg_f_interrupt);
-}
-void SendTempC() {
-	sysActor.sendTo(&temperatureActor, &msg_c_interrupt);
-}
 void joystickInterrupt() {
-	joy_u.rise(&SendTempC);
-	joy_d.rise(&SendTempC);
-	joy_l.rise(&SendTempC);
-	joy_r.rise(&SendTempC);
-	joy_c.rise(&SendTempF);
+	// joystick
+	const PinName &joy_u = p15;
+	const PinName &joy_d = p12;
+	const PinName &joy_l = p13;
+	const PinName &joy_r = p16;
+	const PinName &joy_c = p14;
+
+	InputActor JoyStickInterrupt;
+	Message msg_f(TemperatureActor::TAM_MODE, (void*) TemperatureActor::TEMP_F);
+	Message msg_c(TemperatureActor::TAM_MODE, (void*) TemperatureActor::TEMP_C);
+
+	JoyStickInterrupt.setInterrput(&msg_c, joy_u);
+	JoyStickInterrupt.setInterrput(&msg_c, joy_d);
+	JoyStickInterrupt.setInterrput(&msg_c, joy_l);
+	JoyStickInterrupt.setInterrput(&msg_c, joy_r);
+	JoyStickInterrupt.setInterrput(&msg_f, joy_c);
 }
 
 /*
