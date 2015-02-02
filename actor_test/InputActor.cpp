@@ -6,7 +6,14 @@
  */
 
 #include "InputActor.h"
+#include "TickerComposite.h"
 
+bool InputActor::setInterrput(Actor *dest, Message *msg, int pin){
+	InterruptComposite *ic = new InterruptComposite(dest, msg, pin);
+	interList->add(ic);
+
+	return true;
+}
 InputActor::InputActor() {
 	// TODO Auto-generated constructor stub
 

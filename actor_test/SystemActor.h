@@ -8,7 +8,7 @@
 #ifndef SYSTEMACTOR_H_
 #define SYSTEMACTOR_H_
 
-#include "Actor.h"
+#include "InputActor.h"
 #include "Message.h"
 #include "SimpleList.h"
 class TickerComposite;
@@ -19,7 +19,7 @@ enum SystemCmd{
 };
 
 }//namespace
-class SystemActor: public Actor {
+class SystemActor: public InputActor {
 private:
 	SimpleList *tcList;
 	SimpleList *tocList;

@@ -55,6 +55,6 @@ public:
 	void rise();
 	void fall();
 
-	InterruptComposite(Actor *dest, Message *msg, PinName pin): BaseComposite(dest, msg), interrputIn(pin){};
+	InterruptComposite(Actor *dest, Message *msg, int pin): BaseComposite(dest, msg), interrputIn((PinName)pin){};
 };
 #endif /* TICKERCOMPOSIT_H_ */
